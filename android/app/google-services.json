@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "15475425750",
+    "project_id": "qiita-trends-c83e9",
+    "storage_bucket": "qiita-trends-c83e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15475425750:android:4b90ea6954a575ec7ce477",
+        "android_client_info": {
+          "package_name": "com.example.qiita_trend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmzjgq7d4RnA44rbMqkLmy4IvbJPjm1eU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15475425750:android:8ab5576637ba89ed7ce477",
+        "android_client_info": {
+          "package_name": "com.example.qiita_trends"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmzjgq7d4RnA44rbMqkLmy4IvbJPjm1eU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
