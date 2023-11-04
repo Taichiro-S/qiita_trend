@@ -3,53 +3,66 @@ const functions = require('firebase-functions')
 const axios = require('axios')
 
 const QIITA_API_V2_TAGS =
-  'https://qiita.com/api/v2/tags?per_page=100&sort=count&page='
-
+  'https://qiita.com/api/v2/tags?per_page=1&sort=count&page='
+const timeToFetch = '0 0,6,12,18 * * *'
 admin.initializeApp()
 
-// 毎日6時にQiitaのタグ情報を取得してFirestoreに保存する
+// 毎日6時にQiitaの上位1000個分のタグ情報を取得してFirestoreに保存する
 
 exports.fetchQiitaTags = functions
   .runWith({ timeoutSeconds: 300 })
-  .pubsub.schedule('0 6,18 * * *') // Scheduled for 6:00 am and 6:00 pm
+  .pubsub.schedule(timeToFetch)
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
       let allTags = []
-      for (let page = 1; page <= 10; page++) {
+      for (let page = 1; page <= 1; page++) {
         const response = await axios.get(QIITA_API_V2_TAGS + page)
-        allTags = allTags.concat(response.data.topics)
+        allTags = allTags.concat(response.data)
       }
 
-      const today = new Date()
-      const yesterday = new Date(today)
-      yesterday.setDate(today.getDate() - 1)
+      const now = new Date()
+      const start = new Date(now)
+      start.setHours(start.getHours() - 7)
+      const end = new Date(now)
+      end.setHours(end.getHours() - 1)
       const db = admin.firestore()
-
+      const tagsRef = db.collection('tags')
       for (const tag of allTags) {
-        const tagRef = db.collection('tags').doc(tag.id.toString())
+        const tagRef = tagsRef.doc(tag.id)
         const tagDoc = await tagRef.get()
-
         if (tagDoc.exists) {
-          const oldData = tagDoc.data()
-          const historyRef = tagRef
+          const historyPreviousRef = tagRef
             .collection('history')
-            .doc(yesterday.toISOString())
-          const historyDoc = await historyRef.get()
-          const historyData = {
-            items_change: tag.items_count - oldData.items_count,
-            followers_change: tag.followers_count - oldData.followers_count,
-            date: today,
-          }
-
-          if (historyDoc.exists) {
-            // Update the existing history document with the new changes
-            await historyRef.update(historyData)
+            .where('date', '<', end)
+            .where('date', '>', start)
+            .limit(1)
+          const historyCurrentRef = tagRef
+            .collection('history')
+            .doc(now.toISOString())
+          const historyPreviousDoc = await historyPreviousRef.get()
+          if (!historyPreviousDoc.empty) {
+            // If previous history document exists, calculate the changes
+            const historyData = {
+              items_change:
+                tag.items_count - historyPreviousDoc.docs[0].data().items_count,
+              followers_change:
+                tag.followers_count -
+                historyPreviousDoc.docs[0].data().followers_count,
+              items_count: tag.items_count,
+              followers_count: tag.followers_count,
+              date: now,
+            }
+            await historyCurrentRef.set(historyData)
           } else {
-            // Create a new history document with the changes
-            await historyRef.set(historyData)
+            // If previous history document doesn't exist, save all data.
+            const historyData = {
+              items_count: tag.items_count,
+              followers_count: tag.followers_count,
+              date: now,
+            }
+            await historyCurrentRef.set(historyData)
           }
-
           // Update the main tag document with the new counts
           await tagRef.update({
             items_count: tag.items_count,
@@ -58,19 +71,12 @@ exports.fetchQiitaTags = functions
         } else {
           // If tagDoc doesn't exist, save all data.
           await tagRef.set(tag)
-          await tagRef.collection('history').doc(today.toISOString()).set({
+          await tagRef.collection('history').doc(now.toISOString()).set({
             items_count: tag.items_count,
             followers_count: tag.followers_count,
-            date: today,
+            date: now,
           })
         }
-        // If tagDoc doesn't exist, save all data.
-        await tagRef.set(tag)
-        await tagRef.collection('history').doc(today.toISOString()).set({
-          items_count: tag.items_count,
-          followers_count: tag.followers_count,
-          date: today,
-        })
       }
 
       return null
@@ -87,14 +93,14 @@ exports.fetchQiitaTags = functions
 
 exports.deleteOldHistories = functions
   .runWith({ timeoutSeconds: 300 })
-  .pubsub.schedule('0 10 1 * *')
+  .pubsub.schedule('0 7 * * *')
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
       const db = admin.firestore()
 
       // 全てのトピックのドキュメントを取得
-      const topicsSnapshot = await db.collection('tags').get()
+      const tagsSnapshot = await db.collection('tags').get()
 
       const now = new Date()
       const cutoffDate = new Date(
@@ -105,13 +111,13 @@ exports.deleteOldHistories = functions
 
       const promises = []
 
-      topicsSnapshot.docs.forEach((doc) => {
-        const topicId = doc.id
+      tagsSnapshot.docs.forEach((doc) => {
+        const tagId = doc.id
 
         // 特定の日付よりも前のhistoryドキュメントを取得
         const oldHistoriesQuery = db
           .collection('tags')
-          .doc(topicId)
+          .doc(tagId)
           .collection('history')
           .where('date', '<', cutoffDate)
 
