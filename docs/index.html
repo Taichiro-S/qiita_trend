@@ -6,15 +6,14 @@
     <title>Redirect</title>
   </head>
   <body>
-    <h1>Redirecting...</h1>
     <script>
       // You might want to extract some information from the URL
       // here, like an authorization code if you're implementing OAuth.
-      //   var urlParams = new URLSearchParams(window.location.search);
-      //   var authCode = urlParams.get("code");
+      var urlParams = new URLSearchParams(window.location.search);
+      var authCode = urlParams.get("code");
 
-      //   // Redirect back to your app
-      //   window.location.replace("qiita_trend://oauth/callback?code=" + authCode);
+      // Redirect back to your app
+      window.location.href("qiita_trend://oauth/callback?code=" + authCode);
     </script>
   </body>
 </html>
