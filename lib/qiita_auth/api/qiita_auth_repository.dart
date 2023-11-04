@@ -21,7 +21,7 @@ class QiitaAuthRepository {
     });
 
     final result = await FlutterWebAuth2.authenticate(
-        url: url.toString(), callbackUrlScheme: 'https');
+        url: url.toString(), callbackUrlScheme: 'qiita_trend://oauth/callback');
 
     final authorizationCode = Uri.parse(result).queryParameters['code'];
     if (authorizationCode != null) {

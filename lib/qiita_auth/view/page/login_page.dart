@@ -23,7 +23,7 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final uuid = ref.watch(uuidProvider);
     const scope = 'read_qiita write_qiita';
-    final clientId = dotenv.env['CLIENT_ID']!;
+    final clientId = dotenv.env['QIITA_CLIENT_ID']!;
     final loginUrl = ref
         .watch(loginUrlProvider(uuid: uuid, scope: scope, clientId: clientId));
     return Scaffold(
