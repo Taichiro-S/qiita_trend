@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LoginPage(),
       );
     },
+    QiitaProfileRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const QiitaProfilePage(),
+      );
+    },
     RankingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -46,6 +52,20 @@ class LoginRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'LoginRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [QiitaProfilePage]
+class QiitaProfileRoute extends PageRouteInfo<void> {
+  const QiitaProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          QiitaProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'QiitaProfileRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

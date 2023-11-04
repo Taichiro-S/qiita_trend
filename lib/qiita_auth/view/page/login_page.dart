@@ -17,12 +17,10 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final uuid = ref.watch(uuidProvider);
     const scope = 'read_qiita write_qiita';
-    final clientId = dotenv.env['QIITA_CLIENT_ID'];
-    final clientSecret = dotenv.env['QIITA_CLIENT_SECRET'];
-    if (clientId == null || clientSecret == null) {
-      throw Exception('clientId or clientSecret is null');
-    }
+    final clientId = dotenv.env['QIITA_CLIENT_ID']!;
+    final clientSecret = dotenv.env['QIITA_CLIENT_SECRET']!;
     final qiitaAuth = QiitaAuth(clientId, clientSecret, uuid, scope);
+    final router = AutoRouter.of(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Qiita Auth'),
@@ -37,11 +35,12 @@ class LoginPage extends ConsumerWidget {
                 child: const Text('タグ数の推移'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  qiitaAuth.authorize();
+                onPressed: () async {
+                  await qiitaAuth.authorize();
+                  router.replace(const QiitaProfileRoute());
                 },
                 child: const Text('Login'),
-              ),
+              )
             ],
           ),
         ));

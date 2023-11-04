@@ -1,6 +1,4 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '/constant/url.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -11,10 +9,10 @@ class QiitaAuth {
   final String clientSecret;
   final String state;
   final String scope;
-  final SecureStorage _secureStorage = SecureStorage();
+  final _secureStorage = SecureStorage();
   QiitaAuth(this.clientId, this.clientSecret, this.state, this.scope);
 
-  Future<String> authorize() async {
+  Future<void> authorize() async {
     final url = Uri.https(QIITA_BASE_URL, QIITA_API_V2_AUTHORIZE, {
       'client_id': clientId,
       'scope': scope,
@@ -29,14 +27,13 @@ class QiitaAuth {
     if (authorizationCode != null) {
       final accessToken = await _getAccessToken(authorizationCode);
       await _secureStorage.store('qiitaApiAccessToken', accessToken);
-      return accessToken;
     } else {
       throw Exception('Authorization failed');
     }
   }
 
   Future<String> _getAccessToken(String authorizationCode) async {
-    const url = '$QIITA_BASE_URL$QIITA_API_V2_ACCESS_TOKEN';
+    final url = Uri.https(QIITA_BASE_URL, QIITA_API_V2_ACCESS_TOKEN).toString();
     final response = await http.post(
       Uri.parse(url),
       headers: {
@@ -49,7 +46,7 @@ class QiitaAuth {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       return data['token'];
     } else {

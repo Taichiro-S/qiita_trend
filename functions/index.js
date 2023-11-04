@@ -3,7 +3,7 @@ const functions = require('firebase-functions')
 const axios = require('axios')
 
 const QIITA_API_V2_TAGS =
-  'https://qiita.com/api/v2/tags?per_page=1&sort=count&page='
+  'https://qiita.com/api/v2/tags?per_page=100&sort=count&page='
 const timeToFetch = '0 0,6,12,18 * * *'
 admin.initializeApp()
 
@@ -16,7 +16,7 @@ exports.fetchQiitaTags = functions
   .onRun(async (context) => {
     try {
       let allTags = []
-      for (let page = 1; page <= 1; page++) {
+      for (let page = 1; page <= 10; page++) {
         const response = await axios.get(QIITA_API_V2_TAGS + page)
         allTags = allTags.concat(response.data)
       }
