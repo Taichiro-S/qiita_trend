@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirect</title>
-    <script type="text/javascript">
-      window.onload = function () {
-        // Replace 'yourapp' with your app's custom URL scheme
-        window.location.replace("qiita_trend://oauth/callback");
-      };
-    </script>
   </head>
-  <body></body>
+  <body>
+    <script>
+      // You might want to extract some information from the URL
+      // here, like an authorization code if you're implementing OAuth.
+      var urlParams = new URLSearchParams(window.location.search);
+      var authCode = urlParams.get("code");
+
+      // Redirect back to your app
+      window.location.replace("qiita_trend://oauth/callback?code=" + authCode);
+    </script>
+  </body>
 </html>
