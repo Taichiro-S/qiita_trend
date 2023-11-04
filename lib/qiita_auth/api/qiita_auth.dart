@@ -4,28 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '/qiita_auth/service/secure_storage.dart';
 
-class QiitaAuthRepository {
+class QiitaAuth {
   final String clientId;
   final String clientSecret;
   final String state;
-  final String scope = 'read_qiita write_qiita';
-
-  QiitaAuthRepository(this.clientId, this.clientSecret, this.state);
+  final String scope;
+  final SecureStorage _secureStorage = SecureStorage();
+  QiitaAuth(this.clientId, this.clientSecret, this.state, this.scope);
 
   Future<String> authorize() async {
     final url = Uri.https(QIITA_BASE_URL, QIITA_API_V2_AUTHORIZE, {
       'client_id': clientId,
       'scope': scope,
       'state': state,
+      'response_type': 'code',
     });
 
     final result = await FlutterWebAuth2.authenticate(
-        url: url.toString(), callbackUrlScheme: 'qiita_trend://oauth/callback');
+        url: url.toString(), callbackUrlScheme: 'qiita-trend');
 
     final authorizationCode = Uri.parse(result).queryParameters['code'];
     if (authorizationCode != null) {
-      return await _getAccessToken(authorizationCode);
+      final accessToken = await _getAccessToken(authorizationCode);
+      await _secureStorage.store('qiitaApiAccessToken', accessToken);
+      return accessToken;
     } else {
       throw Exception('Authorization failed');
     }

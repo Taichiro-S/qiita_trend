@@ -13,7 +13,7 @@
       var authCode = urlParams.get("code");
 
       // Redirect back to your app
-      window.location.href("qiita_trend://oauth/callback?code=" + authCode);
+      window.location.replace("qiita_trend://oauth/callback?code=" + authCode);
     </script>
   </body>
 </html>
