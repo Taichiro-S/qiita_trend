@@ -15,12 +15,6 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    LoginRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const LoginPage(),
-      );
-    },
     QiitaProfileRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -33,27 +27,25 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RankingPage(),
       );
     },
-    SettingsRoute.name: (routeData) {
+    RootRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const SettingsPage(),
+        child: const RootPage(),
+      );
+    },
+    TestARoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TestAPage(),
+      );
+    },
+    UserSettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const UserSettingsPage(),
       );
     },
   };
-}
-
-/// generated route for
-/// [LoginPage]
-class LoginRoute extends PageRouteInfo<void> {
-  const LoginRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'LoginRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -85,15 +77,43 @@ class RankingRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SettingsPage]
-class SettingsRoute extends PageRouteInfo<void> {
-  const SettingsRoute({List<PageRouteInfo>? children})
+/// [RootPage]
+class RootRoute extends PageRouteInfo<void> {
+  const RootRoute({List<PageRouteInfo>? children})
       : super(
-          SettingsRoute.name,
+          RootRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'SettingsRoute';
+  static const String name = 'RootRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TestAPage]
+class TestARoute extends PageRouteInfo<void> {
+  const TestARoute({List<PageRouteInfo>? children})
+      : super(
+          TestARoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TestARoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserSettingsPage]
+class UserSettingsRoute extends PageRouteInfo<void> {
+  const UserSettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          UserSettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserSettingsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
