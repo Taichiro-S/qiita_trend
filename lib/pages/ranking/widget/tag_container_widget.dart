@@ -47,7 +47,7 @@ class TagContainerWidget extends ConsumerWidget {
           ),
           subtitle: Column(
             children: [
-              property.toString() == 'itemsCount'
+              property == 'itemsCount'
                   ? Row(children: [
                       const Icon(
                         Icons.description,
@@ -68,26 +68,29 @@ class TagContainerWidget extends ConsumerWidget {
                         ),
                       ),
                     ])
-                  : Row(children: [
-                      const Icon(
-                        Icons.person,
-                        size: 18,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      BarIndicator(
-                          value: followersCount, property: 'maxFollowersCount'),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        displayFollowersCount,
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ]),
+                  : property == 'followersCount'
+                      ? Row(children: [
+                          const Icon(
+                            Icons.person,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          BarIndicator(
+                              value: followersCount,
+                              property: 'maxFollowersCount'),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            displayFollowersCount,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ])
+                      : const SizedBox(),
             ],
           ),
         ));

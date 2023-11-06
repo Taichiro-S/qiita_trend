@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qiita_trend/constant/firestore_arg.dart';
+import 'package:qiita_trend/pages/ranking/provider/property_provider.dart';
+import 'package:qiita_trend/routes/router.dart';
 import '/pages/ranking/provider/tags_notifier_provider.dart';
 import 'widget/tag_container_widget.dart';
 import 'package:auto_route/auto_route.dart';
@@ -9,16 +12,21 @@ class RankingPage extends ConsumerStatefulWidget {
   const RankingPage({super.key});
 
   @override
-  _RankingPageState createState() => _RankingPageState();
+  RankingPageState createState() => RankingPageState();
 }
 
-class _RankingPageState extends ConsumerState<RankingPage> {
+class RankingPageState extends ConsumerState<RankingPage> {
   final ScrollController scrollController = ScrollController();
+  late String property;
   @override
   void initState() {
     super.initState();
+    property = ref.watch(propertyProvider);
     Future.microtask(
-      () => ref.read(tagsProvider.notifier).fetchTags(fieldOrderBy: ),
+      () => ref.read(tagsProvider.notifier).fetchTags(
+          fieldOrderBy: property == 'itemsCount'
+              ? TagsField.itemsCount
+              : TagsField.followersCount),
     );
     scrollController.addListener(scrollListener);
   }
@@ -26,7 +34,10 @@ class _RankingPageState extends ConsumerState<RankingPage> {
   void scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      ref.read(tagsProvider.notifier).fetchMoreTags(fieldOrderBy: );
+      ref.read(tagsProvider.notifier).fetchMoreTags(
+          fieldOrderBy: property == 'itemsCount'
+              ? TagsField.itemsCount
+              : TagsField.followersCount);
     }
   }
 
@@ -39,10 +50,20 @@ class _RankingPageState extends ConsumerState<RankingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final router = AutoRouter.of(context);
     final tagsAsync = ref.watch(tagsProvider);
     return Scaffold(
         appBar: AppBar(
           title: const Text('タグ一覧'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                // AutoRouteを使用している場合は以下のように書きます
+                router.push(const UserSettingsRoute());
+              },
+            ),
+          ],
         ),
         body: tagsAsync.tags.when(
             error: (e, s) {
@@ -64,7 +85,10 @@ class _RankingPageState extends ConsumerState<RankingPage> {
                   },
                 ),
                 onRefresh: () async {
-                  ref.read(tagsProvider.notifier).refreshTags(fieldOrderBy: );
+                  ref.read(tagsProvider.notifier).refreshTags(
+                      fieldOrderBy: property == 'itemsCount'
+                          ? TagsField.itemsCount
+                          : TagsField.followersCount);
                 },
               );
             }));

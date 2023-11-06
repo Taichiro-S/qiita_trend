@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final propertyProvider = StateNotifierProvider((ref) {
+final propertyProvider = StateNotifierProvider<PropertyNotifier, String>((ref) {
   return PropertyNotifier();
 });
 
