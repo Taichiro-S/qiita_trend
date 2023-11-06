@@ -17,14 +17,14 @@ class TagsRepository {
   }
 
   Future<List<TagInfo>> getSortedTags({
-    TagsField field = TagsField.itemsCount,
+    required TagsField fieldOrderBy,
     int limit = DEFAULT_LOAD_TAGS,
     DocumentSnapshot? startAfter,
   }) async {
     try {
       Query query = FirebaseFirestore.instance
           .collection('tags')
-          .orderBy(field.name, descending: true)
+          .orderBy(fieldOrderBy.name, descending: true)
           .limit(limit);
       if (startAfter != null) {
         query = query.startAfterDocument(startAfter);

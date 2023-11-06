@@ -18,7 +18,7 @@ class _RankingPageState extends ConsumerState<RankingPage> {
   void initState() {
     super.initState();
     Future.microtask(
-      () => ref.read(tagsProvider.notifier).fetchTags(),
+      () => ref.read(tagsProvider.notifier).fetchTags(fieldOrderBy: ),
     );
     scrollController.addListener(scrollListener);
   }
@@ -26,7 +26,7 @@ class _RankingPageState extends ConsumerState<RankingPage> {
   void scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      ref.read(tagsProvider.notifier).fetchMoreTags();
+      ref.read(tagsProvider.notifier).fetchMoreTags(fieldOrderBy: );
     }
   }
 
@@ -64,7 +64,7 @@ class _RankingPageState extends ConsumerState<RankingPage> {
                   },
                 ),
                 onRefresh: () async {
-                  ref.read(tagsProvider.notifier).refreshTags();
+                  ref.read(tagsProvider.notifier).refreshTags(fieldOrderBy: );
                 },
               );
             }));
