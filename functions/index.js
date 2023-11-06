@@ -20,6 +20,7 @@ exports.fetchQiitaTags = functions
         const response = await axios.get(QIITA_API_V2_TAGS + page)
         allTags = allTags.concat(response.data)
       }
+      console.info('Fetched tags:', allTags.length)
 
       const now = new Date()
       const start = new Date(now)
@@ -28,6 +29,9 @@ exports.fetchQiitaTags = functions
       end.setHours(end.getHours() - 1)
       const db = admin.firestore()
       const tagsRef = db.collection('tags')
+      const tagsSnapshot = await tagsRef.get()
+      console.info('Stored tags:', tagsSnapshot.size)
+      let addCount = 0
       for (const tag of allTags) {
         const tagRef = tagsRef.doc(tag.id)
         const tagDoc = await tagRef.get()
@@ -54,20 +58,36 @@ exports.fetchQiitaTags = functions
               date: now,
             }
             await historyCurrentRef.set(historyData)
+            addCount += 1
           } else {
-            // If previous history document doesn't exist, save all data.
+            // If previous history document doesn't exist, calculate change from recent data(at least 1 data should exist).
+            const historyRecentPreviousRef = tagRef
+              .collection('history')
+              .where('date', '<', end)
+              .orderBy('date', 'desc')
+              .limit(1)
+            const historyRecentPreviousDoc =
+              await historyRecentPreviousRef.get()
             const historyData = {
+              items_change:
+                tag.items_count -
+                historyRecentPreviousDoc.docs[0].data().items_count,
+              followers_change:
+                tag.followers_count -
+                historyRecentPreviousDoc.docs[0].data().followers_count,
               items_count: tag.items_count,
               followers_count: tag.followers_count,
               date: now,
             }
             await historyCurrentRef.set(historyData)
+            addCount += 1
           }
           // Update the main tag document with the new counts
           await tagRef.update({
             items_count: tag.items_count,
             followers_count: tag.followers_count,
           })
+          addCount += 1
         } else {
           // If tagDoc doesn't exist, save all data.
           await tagRef.set(tag)
@@ -76,9 +96,10 @@ exports.fetchQiitaTags = functions
             followers_count: tag.followers_count,
             date: now,
           })
+          addCount += 1
         }
       }
-
+      console.info('Added tags:', addCount)
       return null
     } catch (error) {
       console.error('Error fetching data:', error.message)

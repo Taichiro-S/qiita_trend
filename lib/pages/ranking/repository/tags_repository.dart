@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:qiita_trend/constant/firestore_arg.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '/pages/ranking/model/tag_info.dart';
 
@@ -9,9 +9,21 @@ class TagsRepository {
   Future<List<TagInfo>> getAllTags() async {
     try {
       final snap = await FirebaseFirestore.instance.collection('tags').get();
-      debugPrint('snap.docs: ${snap.docs.length}');
-      final allTags = snap.docs.map((e) => TagInfo.fromDocument(e)).toList();
-      return allTags..sort((a, b) => b.itemsCount.compareTo(a.itemsCount));
+      return snap.docs.map((e) => TagInfo.fromDocument(e)).toList();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<TagInfo>> getSortedTags(
+      {required TagsField field, required int limit}) async {
+    try {
+      final snap = await FirebaseFirestore.instance
+          .collection('tags')
+          .orderBy(field, descending: true)
+          .limit(limit)
+          .get();
+      return snap.docs.map((e) => TagInfo.fromDocument(e)).toList();
     } catch (e) {
       throw Exception(e);
     }

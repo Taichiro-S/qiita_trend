@@ -70,6 +70,7 @@ class QiitaProfilePage extends ConsumerWidget {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                          const Text('ログインしていません'),
                           ElevatedButton(
                               onPressed: () => webViewNotifier.show(),
                               child: const Text('ログイン'))

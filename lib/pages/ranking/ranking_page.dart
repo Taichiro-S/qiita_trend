@@ -9,7 +9,7 @@ class RankingPage extends ConsumerWidget {
   const RankingPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final topicAsync = ref.watch(tagsProvider);
+    final topicAsync = ref.watch(tagsProvider());
     return Scaffold(
       appBar: AppBar(
         title: const Text('タグ一覧'),

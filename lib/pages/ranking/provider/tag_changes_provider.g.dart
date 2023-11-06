@@ -6,7 +6,7 @@ part of 'tag_changes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagChangesHash() => r'28a18213ceb98dc034b315df663b177dc3654909';
+String _$tagChangesHash() => r'1f24032698a9a6fde3540be0a438eef0bf5202fe';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,16 +34,19 @@ class _SystemHash {
 const tagChangesProvider = TagChangesFamily();
 
 /// See also [tagChanges].
-class TagChangesFamily extends Family<AsyncValue<List<TagChange>>> {
+class TagChangesFamily
+    extends Family<AsyncValue<Map<String, List<TagChange>>>> {
   /// See also [tagChanges].
   const TagChangesFamily();
 
   /// See also [tagChanges].
   TagChangesProvider call({
     required String id,
+    int limit = DEFAULT_TAG_HISTORY_DAYS * 4,
   }) {
     return TagChangesProvider(
       id: id,
+      limit: limit,
     );
   }
 
@@ -53,6 +56,7 @@ class TagChangesFamily extends Family<AsyncValue<List<TagChange>>> {
   ) {
     return call(
       id: provider.id,
+      limit: provider.limit,
     );
   }
 
@@ -72,14 +76,17 @@ class TagChangesFamily extends Family<AsyncValue<List<TagChange>>> {
 }
 
 /// See also [tagChanges].
-class TagChangesProvider extends AutoDisposeFutureProvider<List<TagChange>> {
+class TagChangesProvider
+    extends AutoDisposeFutureProvider<Map<String, List<TagChange>>> {
   /// See also [tagChanges].
   TagChangesProvider({
     required String id,
+    int limit = DEFAULT_TAG_HISTORY_DAYS * 4,
   }) : this._internal(
           (ref) => tagChanges(
             ref as TagChangesRef,
             id: id,
+            limit: limit,
           ),
           from: tagChangesProvider,
           name: r'tagChangesProvider',
@@ -91,6 +98,7 @@ class TagChangesProvider extends AutoDisposeFutureProvider<List<TagChange>> {
           allTransitiveDependencies:
               TagChangesFamily._allTransitiveDependencies,
           id: id,
+          limit: limit,
         );
 
   TagChangesProvider._internal(
@@ -101,13 +109,16 @@ class TagChangesProvider extends AutoDisposeFutureProvider<List<TagChange>> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.limit,
   }) : super.internal();
 
   final String id;
+  final int limit;
 
   @override
   Override overrideWith(
-    FutureOr<List<TagChange>> Function(TagChangesRef provider) create,
+    FutureOr<Map<String, List<TagChange>>> Function(TagChangesRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -119,41 +130,52 @@ class TagChangesProvider extends AutoDisposeFutureProvider<List<TagChange>> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        limit: limit,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<TagChange>> createElement() {
+  AutoDisposeFutureProviderElement<Map<String, List<TagChange>>>
+      createElement() {
     return _TagChangesProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TagChangesProvider && other.id == id;
+    return other is TagChangesProvider &&
+        other.id == id &&
+        other.limit == limit;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, limit.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin TagChangesRef on AutoDisposeFutureProviderRef<List<TagChange>> {
+mixin TagChangesRef
+    on AutoDisposeFutureProviderRef<Map<String, List<TagChange>>> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `limit` of this provider.
+  int get limit;
 }
 
 class _TagChangesProviderElement
-    extends AutoDisposeFutureProviderElement<List<TagChange>>
+    extends AutoDisposeFutureProviderElement<Map<String, List<TagChange>>>
     with TagChangesRef {
   _TagChangesProviderElement(super.provider);
 
   @override
   String get id => (origin as TagChangesProvider).id;
+  @override
+  int get limit => (origin as TagChangesProvider).limit;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
