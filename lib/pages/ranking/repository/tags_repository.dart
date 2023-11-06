@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qiita_trend/constant/default_values.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '/pages/ranking/model/tag_info.dart';
@@ -15,15 +16,22 @@ class TagsRepository {
     }
   }
 
-  Future<List<TagInfo>> getSortedTags(
-      {required TagsField field, required int limit}) async {
+  Future<List<TagInfo>> getSortedTags({
+    TagsField field = TagsField.itemsCount,
+    int limit = DEFAULT_LOAD_TAGS,
+    DocumentSnapshot? startAfter,
+  }) async {
     try {
-      final snap = await FirebaseFirestore.instance
+      Query query = FirebaseFirestore.instance
           .collection('tags')
-          .orderBy(field, descending: true)
-          .limit(limit)
-          .get();
-      return snap.docs.map((e) => TagInfo.fromDocument(e)).toList();
+          .orderBy(field.name, descending: true)
+          .limit(limit);
+      if (startAfter != null) {
+        query = query.startAfterDocument(startAfter);
+      }
+
+      final QuerySnapshot snap = await query.get();
+      return snap.docs.map((doc) => TagInfo.fromDocument(doc)).toList();
     } catch (e) {
       throw Exception(e);
     }
