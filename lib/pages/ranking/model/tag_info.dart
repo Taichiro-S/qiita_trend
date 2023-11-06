@@ -9,6 +9,7 @@ class TagInfo with _$TagInfo {
     required String id,
     required String followersCount,
     required String itemsCount,
+    required DocumentSnapshot documentSnapshot,
     String? iconUrl,
   }) = _TagInfo;
 
@@ -18,6 +19,7 @@ class TagInfo with _$TagInfo {
       followersCount: doc['followers_count'].toString(),
       itemsCount: doc['items_count'].toString(),
       iconUrl: doc['icon_url'],
+      documentSnapshot: doc,
     );
   }
 }

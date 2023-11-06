@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/pages/ranking/model/tag_info.dart';
 
-class TagChangesContainer extends ConsumerWidget {
+class TagContainerWidget extends ConsumerWidget {
   final TagInfo tag;
-  const TagChangesContainer({super.key, required this.tag});
+  const TagContainerWidget({super.key, required this.tag});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,12 +18,12 @@ class TagChangesContainer extends ConsumerWidget {
                 ? NetworkImage(tag.iconUrl!)
                 : const AssetImage('assets/images/no_image.png')
                     as ImageProvider<Object>,
-            radius: 25,
+            radius: 10,
           ),
           title: Text(
             tag.id,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -42,9 +42,23 @@ class TagChangesContainer extends ConsumerWidget {
                   fontSize: 15,
                 ),
               ),
+              // Padding(
+              //     padding: const EdgeInsets.only(
+              //       left: 8,
+              //       right: 8,
+              //       bottom: 8,
+              //     ),
+              //     child: ElevatedButton(
+              //       style:
+              //           ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              //       child: const Text('タグ数の推移'),
+              //       onPressed: () {
+              //         AutoRouter.of(context)
+              //             .push(TopicTagCountRoute(tag: tag));
+              //       },
+              //     )),
             ],
           ),
-          trailing: const Icon(Icons.more_vert),
         ));
   }
 }

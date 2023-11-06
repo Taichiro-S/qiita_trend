@@ -19,6 +19,8 @@ mixin _$TagInfo {
   String get id => throw _privateConstructorUsedError;
   String get followersCount => throw _privateConstructorUsedError;
   String get itemsCount => throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?> get documentSnapshot =>
+      throw _privateConstructorUsedError;
   String? get iconUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,7 +33,11 @@ abstract class $TagInfoCopyWith<$Res> {
       _$TagInfoCopyWithImpl<$Res, TagInfo>;
   @useResult
   $Res call(
-      {String id, String followersCount, String itemsCount, String? iconUrl});
+      {String id,
+      String followersCount,
+      String itemsCount,
+      DocumentSnapshot<Object?> documentSnapshot,
+      String? iconUrl});
 }
 
 /// @nodoc
@@ -50,6 +56,7 @@ class _$TagInfoCopyWithImpl<$Res, $Val extends TagInfo>
     Object? id = null,
     Object? followersCount = null,
     Object? itemsCount = null,
+    Object? documentSnapshot = null,
     Object? iconUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +72,10 @@ class _$TagInfoCopyWithImpl<$Res, $Val extends TagInfo>
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as String,
+      documentSnapshot: null == documentSnapshot
+          ? _value.documentSnapshot
+          : documentSnapshot // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>,
       iconUrl: freezed == iconUrl
           ? _value.iconUrl
           : iconUrl // ignore: cast_nullable_to_non_nullable
@@ -81,7 +92,11 @@ abstract class _$$TagInfoImplCopyWith<$Res> implements $TagInfoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id, String followersCount, String itemsCount, String? iconUrl});
+      {String id,
+      String followersCount,
+      String itemsCount,
+      DocumentSnapshot<Object?> documentSnapshot,
+      String? iconUrl});
 }
 
 /// @nodoc
@@ -98,6 +113,7 @@ class __$$TagInfoImplCopyWithImpl<$Res>
     Object? id = null,
     Object? followersCount = null,
     Object? itemsCount = null,
+    Object? documentSnapshot = null,
     Object? iconUrl = freezed,
   }) {
     return _then(_$TagInfoImpl(
@@ -113,6 +129,10 @@ class __$$TagInfoImplCopyWithImpl<$Res>
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as String,
+      documentSnapshot: null == documentSnapshot
+          ? _value.documentSnapshot
+          : documentSnapshot // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>,
       iconUrl: freezed == iconUrl
           ? _value.iconUrl
           : iconUrl // ignore: cast_nullable_to_non_nullable
@@ -128,6 +148,7 @@ class _$TagInfoImpl with DiagnosticableTreeMixin implements _TagInfo {
       {required this.id,
       required this.followersCount,
       required this.itemsCount,
+      required this.documentSnapshot,
       this.iconUrl});
 
   @override
@@ -137,11 +158,13 @@ class _$TagInfoImpl with DiagnosticableTreeMixin implements _TagInfo {
   @override
   final String itemsCount;
   @override
+  final DocumentSnapshot<Object?> documentSnapshot;
+  @override
   final String? iconUrl;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TagInfo(id: $id, followersCount: $followersCount, itemsCount: $itemsCount, iconUrl: $iconUrl)';
+    return 'TagInfo(id: $id, followersCount: $followersCount, itemsCount: $itemsCount, documentSnapshot: $documentSnapshot, iconUrl: $iconUrl)';
   }
 
   @override
@@ -152,6 +175,7 @@ class _$TagInfoImpl with DiagnosticableTreeMixin implements _TagInfo {
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('followersCount', followersCount))
       ..add(DiagnosticsProperty('itemsCount', itemsCount))
+      ..add(DiagnosticsProperty('documentSnapshot', documentSnapshot))
       ..add(DiagnosticsProperty('iconUrl', iconUrl));
   }
 
@@ -165,12 +189,14 @@ class _$TagInfoImpl with DiagnosticableTreeMixin implements _TagInfo {
                 other.followersCount == followersCount) &&
             (identical(other.itemsCount, itemsCount) ||
                 other.itemsCount == itemsCount) &&
+            (identical(other.documentSnapshot, documentSnapshot) ||
+                other.documentSnapshot == documentSnapshot) &&
             (identical(other.iconUrl, iconUrl) || other.iconUrl == iconUrl));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, followersCount, itemsCount, iconUrl);
+  int get hashCode => Object.hash(
+      runtimeType, id, followersCount, itemsCount, documentSnapshot, iconUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -184,6 +210,7 @@ abstract class _TagInfo implements TagInfo {
       {required final String id,
       required final String followersCount,
       required final String itemsCount,
+      required final DocumentSnapshot<Object?> documentSnapshot,
       final String? iconUrl}) = _$TagInfoImpl;
 
   @override
@@ -192,6 +219,8 @@ abstract class _TagInfo implements TagInfo {
   String get followersCount;
   @override
   String get itemsCount;
+  @override
+  DocumentSnapshot<Object?> get documentSnapshot;
   @override
   String? get iconUrl;
   @override
