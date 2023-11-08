@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/default_values.dart';
-import 'package:uuid/uuid.dart';
+import '/pages/qiita_profile/provider/uuid_provider.dart';
 import '/constant/url.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -10,24 +11,22 @@ import '/constant/storage_key.dart';
 class QiitaAuth {
   final String clientId = dotenv.env['QIITA_CLIENT_ID']!;
   final String clientSecret = dotenv.env['QIITA_CLIENT_SECRET']!;
-  final String state = 'csrf protection';
   final String scope = QIITA_SCOPE;
-
   final _secureStorage = SecureStorage();
 
-  String get authorizeUrl => Uri.https(QIITA_BASE_URL, QIITA_API_V2_AUTHORIZE, {
-        'client_id': clientId,
-        'scope': scope,
-        'state': state,
-        'response_type': 'code',
-      }).toString();
+  String getAuthorizeUrl(String state) {
+    return Uri.https(QIITA_BASE_URL, QIITA_API_V2_AUTHORIZE, {
+      'client_id': clientId,
+      'scope': scope,
+      'state': state,
+      'response_type': 'code',
+    }).toString();
+  }
 
-  Future<void> login(Uri uri) async {
+  Future<void> login(Uri uri, String uuid) async {
     final authorizationCode = Uri.parse(uri.toString()).queryParameters['code'];
     final state = Uri.parse(uri.toString()).queryParameters['state'];
-    print('callback state : $state');
-    print('this state : ${this.state}');
-    if (authorizationCode != null) {
+    if (authorizationCode != null && state == uuid) {
       final accessToken = await _getAccessToken(authorizationCode);
       await _secureStorage.write(QIITA_API_ACCESS_TOKEN, accessToken);
       await _secureStorage.read(QIITA_API_ACCESS_TOKEN);

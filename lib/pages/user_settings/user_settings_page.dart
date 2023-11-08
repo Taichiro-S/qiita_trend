@@ -20,7 +20,7 @@ class UserSettingsPage extends ConsumerWidget {
         title: const Text('設定'),
       ),
       body: Column(
-        children: <String>['id', 'itemsCount', 'followersCount']
+        children: <String>['itemsCount', 'followersCount']
             .map((String property) => RadioListTile<String>(
                   title: Text(property),
                   value: property,

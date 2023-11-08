@@ -19,6 +19,17 @@ class RankingPage extends ConsumerWidget {
     final property = ref.watch(propertyProvider);
     final router = AutoRouter.of(context);
 
+    ref.listen<String>(propertyProvider, (previousState, state) {
+      if (state != previousState) {
+        print(state);
+        print(previousState);
+        ref.read(tagsProvider.notifier).fetchTags(
+            fieldOrderBy: state == 'itemsCount'
+                ? TagsField.itemsCount
+                : TagsField.followersCount);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('タグランキング'),
