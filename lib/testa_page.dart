@@ -6,7 +6,7 @@ import 'package:qiita_trend/constant/url.dart';
 import 'package:uuid/uuid.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-@RoutePage()
+// @RoutePage()
 class TestAPage extends StatefulWidget {
   const TestAPage({super.key});
   @override

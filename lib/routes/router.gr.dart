@@ -33,12 +33,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RootPage(),
       );
     },
-    TestARoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const TestAPage(),
-      );
-    },
     UserSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -86,20 +80,6 @@ class RootRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RootRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [TestAPage]
-class TestARoute extends PageRouteInfo<void> {
-  const TestARoute({List<PageRouteInfo>? children})
-      : super(
-          TestARoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'TestARoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
