@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:qiita_trend/constant/default_values.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
 import '/pages/ranking/model/tag_info.dart';
 import '/pages/ranking/repository/tags_repository.dart';
@@ -34,13 +33,11 @@ class TagsNotifier extends StateNotifier<TagsState> {
   final TagsRepository _repository;
   TagsNotifier(this._repository) : super(TagsState.initial());
 
-  Future<void> fetchTags(
-      {TagsField field = TagsField.itemsCount,
-      int limit = DEFAULT_LOAD_TAGS}) async {
+  Future<void> fetchTags({required TagsField fieldOrderBy}) async {
     state = state.copyWith(tags: const AsyncValue.loading());
     try {
       final newTags =
-          await _repository.getSortedTags(field: field, limit: limit);
+          await _repository.getSortedTags(fieldOrderBy: fieldOrderBy);
       state = state.copyWith(
         tags: AsyncValue.data(newTags),
         lastDoc: newTags.isNotEmpty ? newTags.last.documentSnapshot : null,
@@ -50,7 +47,7 @@ class TagsNotifier extends StateNotifier<TagsState> {
     }
   }
 
-  Future<void> fetchMoreTags() async {
+  Future<void> fetchMoreTags({required TagsField fieldOrderBy}) async {
     if (state.lastDoc == null ||
         state.tags is! AsyncData ||
         state.isLoadingMore) {
@@ -58,8 +55,8 @@ class TagsNotifier extends StateNotifier<TagsState> {
     }
     state = state.copyWith(isLoadingMore: true);
     try {
-      final newTags =
-          await _repository.getSortedTags(startAfter: state.lastDoc);
+      final newTags = await _repository.getSortedTags(
+          fieldOrderBy: fieldOrderBy, startAfter: state.lastDoc);
       state = state.copyWith(
         tags: AsyncValue.data([...(state.tags.value ?? []), ...newTags]),
         lastDoc: newTags.isNotEmpty ? newTags.last.documentSnapshot : null,
@@ -71,9 +68,9 @@ class TagsNotifier extends StateNotifier<TagsState> {
     }
   }
 
-  Future<void> refreshTags() async {
+  Future<void> refreshTags({required TagsField fieldOrderBy}) async {
     state = TagsState.initial();
-    await fetchTags();
+    await fetchTags(fieldOrderBy: fieldOrderBy);
   }
 }
 

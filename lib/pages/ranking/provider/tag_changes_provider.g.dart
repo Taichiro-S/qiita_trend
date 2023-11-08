@@ -6,7 +6,7 @@ part of 'tag_changes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagChangesHash() => r'1f24032698a9a6fde3540be0a438eef0bf5202fe';
+String _$tagChangesHash() => r'700c9ae9e87e46d37010a54179ca8c090e767065';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,8 +34,7 @@ class _SystemHash {
 const tagChangesProvider = TagChangesFamily();
 
 /// See also [tagChanges].
-class TagChangesFamily
-    extends Family<AsyncValue<Map<String, List<TagChange>>>> {
+class TagChangesFamily extends Family<AsyncValue<List<TagChange>>> {
   /// See also [tagChanges].
   const TagChangesFamily();
 
@@ -76,8 +75,7 @@ class TagChangesFamily
 }
 
 /// See also [tagChanges].
-class TagChangesProvider
-    extends AutoDisposeFutureProvider<Map<String, List<TagChange>>> {
+class TagChangesProvider extends AutoDisposeFutureProvider<List<TagChange>> {
   /// See also [tagChanges].
   TagChangesProvider({
     required String id,
@@ -117,8 +115,7 @@ class TagChangesProvider
 
   @override
   Override overrideWith(
-    FutureOr<Map<String, List<TagChange>>> Function(TagChangesRef provider)
-        create,
+    FutureOr<List<TagChange>> Function(TagChangesRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -136,8 +133,7 @@ class TagChangesProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<Map<String, List<TagChange>>>
-      createElement() {
+  AutoDisposeFutureProviderElement<List<TagChange>> createElement() {
     return _TagChangesProviderElement(this);
   }
 
@@ -158,8 +154,7 @@ class TagChangesProvider
   }
 }
 
-mixin TagChangesRef
-    on AutoDisposeFutureProviderRef<Map<String, List<TagChange>>> {
+mixin TagChangesRef on AutoDisposeFutureProviderRef<List<TagChange>> {
   /// The parameter `id` of this provider.
   String get id;
 
@@ -168,7 +163,7 @@ mixin TagChangesRef
 }
 
 class _TagChangesProviderElement
-    extends AutoDisposeFutureProviderElement<Map<String, List<TagChange>>>
+    extends AutoDisposeFutureProviderElement<List<TagChange>>
     with TagChangesRef {
   _TagChangesProviderElement(super.provider);
 

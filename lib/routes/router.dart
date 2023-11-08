@@ -13,9 +13,9 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
         AutoRoute(path: '/', page: RootRoute.page, children: [
           AutoRoute(path: '', page: RankingRoute.page),
-          AutoRoute(path: 'user_settings', page: UserSettingsRoute.page),
           AutoRoute(path: 'qiita_profile', page: QiitaProfileRoute.page),
-          AutoRoute(path: 'test', page: TestARoute.page),
-        ])
+          // AutoRoute(path: 'test', page: TestARoute.page),
+        ]),
+        AutoRoute(path: '/user_settings', page: UserSettingsRoute.page),
       ];
 }

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/api/qiita_auth.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/webview_provider.dart';
 import 'package:qiita_trend/pages/qiita_profile/widget/qiita_login_page_widget.dart';
-import 'package:qiita_trend/provider/qiita_auth_provider.dart';
+import 'package:qiita_trend/provider/qiita_auth_storage_provider.dart';
 import '/pages/qiita_profile/provider/qiita_profile_provider.dart';
 
 @RoutePage()
@@ -16,7 +16,7 @@ class QiitaProfilePage extends ConsumerWidget {
     final webView = ref.watch(webViewProvider);
     final webViewNotifier = ref.read(webViewProvider.notifier);
     final qiitaProfileAsync = ref.watch(qiitaProfileProvider);
-    final isQiitaAuthAsync = ref.watch(qiitaAuthProvider);
+    final isQiitaAuthAsync = ref.watch(qiitaAuthStorageProvider);
     final qiitaAuth = QiitaAuth();
     if (webView['open']!) {
       return Scaffold(
@@ -62,7 +62,10 @@ class QiitaProfilePage extends ConsumerWidget {
                             children: [
                               Text('userame: ${qiitProfile.name ?? '名無し'} さん'),
                               ElevatedButton(
-                                  onPressed: () => qiitaAuth.logout(),
+                                  onPressed: () async {
+                                    await qiitaAuth.logout();
+                                    ref.invalidate(qiitaAuthStorageProvider);
+                                  },
                                   child: const Text('ログアウト'))
                             ]);
                       },

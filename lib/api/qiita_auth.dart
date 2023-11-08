@@ -10,7 +10,7 @@ import '/constant/storage_key.dart';
 class QiitaAuth {
   final String clientId = dotenv.env['QIITA_CLIENT_ID']!;
   final String clientSecret = dotenv.env['QIITA_CLIENT_SECRET']!;
-  final String state = const Uuid().v4();
+  final String state = 'csrf protection';
   final String scope = QIITA_SCOPE;
 
   final _secureStorage = SecureStorage();
@@ -24,9 +24,14 @@ class QiitaAuth {
 
   Future<void> login(Uri uri) async {
     final authorizationCode = Uri.parse(uri.toString()).queryParameters['code'];
+    final state = Uri.parse(uri.toString()).queryParameters['state'];
+    print('callback state : $state');
+    print('this state : ${this.state}');
     if (authorizationCode != null) {
       final accessToken = await _getAccessToken(authorizationCode);
-      await _secureStorage.store(QIITA_API_ACCESS_TOKEN, accessToken);
+      await _secureStorage.write(QIITA_API_ACCESS_TOKEN, accessToken);
+      await _secureStorage.read(QIITA_API_ACCESS_TOKEN);
+      print('login success : $accessToken');
     } else {
       throw Exception('Authorization failed');
     }
@@ -55,7 +60,7 @@ class QiitaAuth {
   }
 
   Future<void> logout() async {
-    final accessToken = await _secureStorage.get(QIITA_API_ACCESS_TOKEN);
+    final accessToken = await _secureStorage.read(QIITA_API_ACCESS_TOKEN);
     final url =
         Uri.https(QIITA_BASE_URL, '$QIITA_API_V2_ACCESS_TOKEN/$accessToken')
             .toString();

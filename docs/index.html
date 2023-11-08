@@ -9,7 +9,10 @@
     <script>
       var urlParams = new URLSearchParams(window.location.search);
       var authCode = urlParams.get("code");
-      window.location.replace("qiita-trend://oauth/callback?code=" + authCode);
+      var authState = urlParams.get("state");
+      window.location.replace(
+        "qiita-trend://oauth/callback?code=" + authCode + "&state=" + authState
+      );
     </script>
   </body>
 </html>

@@ -4,8 +4,7 @@ import '/pages/ranking/model/tag_change.dart';
 part 'tag_changes_repository.g.dart';
 
 class TagChangesRepository {
-  Future<Map<String, List<TagChange>>> getTagChanges(
-      String id, int limit) async {
+  Future<List<TagChange>> getTagChanges(String id, int limit) async {
     try {
       final today = Timestamp.now();
       final tagRef = FirebaseFirestore.instance.collection('tags');
@@ -16,9 +15,7 @@ class TagChangesRepository {
           .orderBy('date', descending: true)
           .limit(limit);
       final snap = await tagChangeRef.get();
-      final tagChanges =
-          snap.docs.map((e) => TagChange.fromDocument(id, e)).toList();
-      return {id: tagChanges};
+      return snap.docs.map((e) => TagChange.fromDocument(id, e)).toList();
     } catch (e) {
       throw Exception(e);
     }
