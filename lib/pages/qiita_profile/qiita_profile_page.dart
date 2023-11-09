@@ -5,6 +5,7 @@ import 'package:qiita_trend/api/qiita_auth.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/webview_provider.dart';
 import 'package:qiita_trend/pages/qiita_profile/widget/qiita_login_page_widget.dart';
 import 'package:qiita_trend/provider/qiita_auth_storage_provider.dart';
+import 'package:qiita_trend/widget/circle_loading_widget.dart';
 import '/pages/qiita_profile/provider/qiita_profile_provider.dart';
 
 @RoutePage()
@@ -21,8 +22,7 @@ class QiitaProfilePage extends ConsumerWidget {
     ref.listen<AsyncValue<bool>>(qiitaAuthStorageProvider,
         (_, isQiitaAuthAsync) {
       if (isQiitaAuthAsync.value == true) {
-        // If the user is authenticated, fetch the profile
-        // ref.invalidate(qiitaProfileProvider);
+        ref.invalidate(qiitaProfileProvider);
       }
     });
     if (webView['open']!) {
@@ -37,14 +37,18 @@ class QiitaProfilePage extends ConsumerWidget {
                 padding: EdgeInsetsDirectional.only(start: 20),
                 child: Text("Login Qiita account")),
           ])),
-          body:
-              // webView['loading']!
-              // ? const Center(child: CircularProgressIndicator())
-              // :
-              const Column(children: [
+          body: Column(children: [
             Expanded(
-                child: Stack(children: [
-              QiitaLoginPageWidget(),
+                child: Stack(children: <Widget>[
+              const QiitaLoginPageWidget(),
+              webView['loading']!
+                  ? Container(
+                      color: Colors.white,
+                      child: const Center(
+                          child: CircleLoadingWidget(
+                              color: Colors.green, fontSize: 20)),
+                    )
+                  : Container()
             ]))
           ]));
     } else {
@@ -54,20 +58,22 @@ class QiitaProfilePage extends ConsumerWidget {
           ),
           body: isQiitaAuthAsync.when(
             error: (e, s) => Text(e.toString()),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(
+                child: CircleLoadingWidget(color: Colors.green, fontSize: 20)),
             data: (isAuth) {
-              // Only build the profile UI if the user is authenticated
               if (isAuth) {
-                // Watch the profile provider here inside the condition
                 final qiitaProfileAsync = ref.watch(qiitaProfileProvider);
                 return qiitaProfileAsync.when(
                   error: (e, s) => Text(e.toString()),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                  loading: () => const Center(
+                      child: CircleLoadingWidget(
+                          color: Colors.green, fontSize: 20)),
                   data: (qiitaProfile) {
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                    return Center(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                           Text('userame: ${qiitaProfile.name ?? '名無し'} さん'),
                           ElevatedButton(
                               onPressed: () async {
@@ -75,62 +81,23 @@ class QiitaProfilePage extends ConsumerWidget {
                                 ref.invalidate(qiitaAuthStorageProvider);
                               },
                               child: const Text('ログアウト'))
-                        ]);
+                        ]));
                   },
                 );
               } else {
-                return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                return Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
                       const Text('ログインしていません'),
                       ElevatedButton(
                           onPressed: () => webViewNotifier.show(),
                           child: const Text('ログイン'))
-                    ]);
+                    ]));
               }
             },
           ));
     }
   }
 }
-
-//         body: isQiitaAuthAsync.when(
-//           error: (e, s) => Text(e.toString()),
-//           loading: () => const Center(child: CircularProgressIndicator()),
-//           data: (isAuth) {
-//             return Scaffold(
-//                 body: Column(children: [
-//               isAuth
-//                   ? qiitaProfileAsync.when(
-//                       error: (e, s) => Text(e.toString()),
-//                       loading: () =>
-//                           const Center(child: CircularProgressIndicator()),
-//                       data: (qiitaProfile) {
-//                         return Column(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             children: [
-//                               Text('userame: ${qiitaProfile.name ?? '名無し'} さん'),
-//                               ElevatedButton(
-//                                   onPressed: () async {
-//                                     await qiitaAuth.logout();
-//                                     ref.invalidate(qiitaAuthStorageProvider);
-//                                   },
-//                                   child: const Text('ログアウト'))
-//                             ]);
-//                       },
-//                     )
-//                   : Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                           const Text('ログインしていません'),
-//                           ElevatedButton(
-//                               onPressed: () => webViewNotifier.show(),
-//                               child: const Text('ログイン'))
-//                         ])
-//             ]));
-//           },
-//         ),
-//       );
-//     }
-//   }
-// }

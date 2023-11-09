@@ -23,14 +23,12 @@ class QiitaAuth {
     }).toString();
   }
 
-  Future<void> login(Uri uri, String uuid) async {
+  Future<void> login(Uri uri, String state) async {
     final authorizationCode = Uri.parse(uri.toString()).queryParameters['code'];
-    final state = Uri.parse(uri.toString()).queryParameters['state'];
-    if (authorizationCode != null && state == uuid) {
+    final callbackState = Uri.parse(uri.toString()).queryParameters['state'];
+    if (authorizationCode != null && callbackState == state) {
       final accessToken = await _getAccessToken(authorizationCode);
       await _secureStorage.write(QIITA_API_ACCESS_TOKEN, accessToken);
-      await _secureStorage.read(QIITA_API_ACCESS_TOKEN);
-      print('login success : $accessToken');
     } else {
       throw Exception('Authorization failed');
     }

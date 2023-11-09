@@ -4,6 +4,7 @@ import 'package:qiita_trend/constant/firestore_arg.dart';
 import 'package:qiita_trend/pages/ranking/provider/property_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
 import 'package:qiita_trend/routes/router.dart';
+import 'package:qiita_trend/widget/circle_loading_widget.dart';
 import '/pages/ranking/provider/tags_notifier_provider.dart';
 import 'widget/tag_container_widget.dart';
 import 'package:auto_route/auto_route.dart';
@@ -43,7 +44,8 @@ class RankingPage extends ConsumerWidget {
         ],
       ),
       body: tagsAsync.tags.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(
+            child: CircleLoadingWidget(color: Colors.green, fontSize: 20)),
         error: (error, stack) => Center(child: Text('エラー: $error')),
         data: (tags) {
           return RefreshIndicator(
@@ -52,7 +54,10 @@ class RankingPage extends ConsumerWidget {
               itemCount: tags.length + (tagsAsync.isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
                 if (tagsAsync.isLoadingMore && index == tags.length) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ));
                 }
 
                 final tag = tags[index];

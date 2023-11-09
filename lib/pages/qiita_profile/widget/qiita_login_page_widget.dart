@@ -15,6 +15,7 @@ class QiitaLoginPageWidget extends ConsumerWidget {
     final QiitaAuth qiitaAuth = QiitaAuth();
     InAppWebViewController? webViewController;
     final webViewNotifier = ref.read(webViewProvider.notifier);
+    final webViewState = ref.watch(webViewProvider);
     final state = ref.read(uuidProvider);
     return InAppWebView(
       initialUrlRequest:
@@ -23,11 +24,21 @@ class QiitaLoginPageWidget extends ConsumerWidget {
         webViewController = controller;
       },
       onLoadStart: (controller, url) async {
-        debugPrint(url.toString());
-        // webViewNotifier.loading();
+        // debugPrint(url.toString());
+
         if (url != null) {
+          webViewNotifier.loading();
           try {
+            var cookies = await getCookies(url);
+            for (var cookie in cookies) {
+              debugPrint(cookie.toString());
+            }
             await deleteCookies(url);
+            cookies = await getCookies(url);
+            debugPrint('cookies deleted');
+            for (var cookie in cookies) {
+              debugPrint(cookie.toString());
+            }
             if (url.toString().contains('/oauth/callback')) {
               await qiitaAuth.login(url, state);
               webViewNotifier.hide();
@@ -39,13 +50,13 @@ class QiitaLoginPageWidget extends ConsumerWidget {
         }
       },
       onLoadStop: (controller, url) async {
-        // webViewNotifier.loaded();
         if (url.toString().startsWith('https://qiita.com/login')) {
           await controller.evaluateJavascript(source: """
         document.querySelector('.sessions-Registration_oauthWrapper').style.display = 'none';
         // Use the appropriate selector for the elements you want to hide or remove
       """);
         }
+        webViewNotifier.loaded();
       },
       onLoadError: (controller, url, code, message) {
         /*
