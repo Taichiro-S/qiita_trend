@@ -5,7 +5,7 @@ import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart'
 import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
 import 'package:qiita_trend/routes/router.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
-import '/pages/ranking/provider/loaded_tags_provider.dart';
+import '/pages/ranking/provider/tags_notifier_provider.dart';
 import 'widget/tag_container_widget.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -16,13 +16,13 @@ class RankingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = ref.watch(scrollControllerProvider);
-    final loadedTagsAsync = ref.watch(loadedTagsProvider);
-    final selectedpPoperty = ref.watch(propertyProvider);
+    final tagsAsync = ref.watch(tagsProvider);
+    final property = ref.watch(propertyProvider);
     final router = AutoRouter.of(context);
 
     ref.listen<String>(propertyProvider, (previousState, state) {
       if (state != previousState) {
-        ref.read(loadedTagsProvider.notifier).fetchTags(
+        ref.read(tagsProvider.notifier).fetchTags(
             fieldOrderBy: state == 'itemsCount'
                 ? TagsField.itemsCount
                 : TagsField.followersCount);
@@ -41,17 +41,18 @@ class RankingPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: loadedTagsAsync.tags.when(
+      body: tagsAsync.tags.when(
         loading: () => const Center(
             child: CircleLoadingWidget(color: Colors.green, fontSize: 20)),
-        error: (error, stack) => Center(child: Text('エラー: $error')),
+        error: (error, stack) =>
+            Center(child: Text('データの読み込み中にエラーが発生しました: $error')),
         data: (tags) {
           return RefreshIndicator(
             child: ListView.builder(
               controller: scrollController,
-              itemCount: tags.length + (loadedTagsAsync.isLoadingMore ? 1 : 0),
+              itemCount: tags.length + (tagsAsync.isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
-                if (loadedTagsAsync.isLoadingMore && index == tags.length) {
+                if (tagsAsync.isLoadingMore && index == tags.length) {
                   return const Center(
                       child: CircularProgressIndicator(
                     color: Colors.green,
@@ -63,8 +64,8 @@ class RankingPage extends ConsumerWidget {
               },
             ),
             onRefresh: () async {
-              ref.read(loadedTagsProvider.notifier).fetchTags(
-                  fieldOrderBy: selectedpPoperty == 'itemsCount'
+              ref.read(tagsProvider.notifier).refreshTags(
+                  fieldOrderBy: property == 'itemsCount'
                       ? TagsField.itemsCount
                       : TagsField.followersCount);
             },

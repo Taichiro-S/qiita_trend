@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
-import 'package:qiita_trend/pages/ranking/provider/property_provider.dart';
-import 'package:qiita_trend/pages/ranking/provider/tags_notifier_provider.dart';
+import 'package:qiita_trend/pages/ranking/provider/tag_changes_provider.dart';
+import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
+// import 'package:qiita_trend/pages/ranking/provider/tags_notifier_provider.dart';
+import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
 
 final scrollControllerProvider =
     StateNotifierProvider<ScrollControllerNotifier, ScrollController>(
@@ -15,13 +17,13 @@ class ScrollControllerNotifier extends StateNotifier<ScrollController> {
   ScrollControllerNotifier(this.ref) : super(ScrollController()) {
     state.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchInitialTags();
+      _fetchInitialDatas();
     });
   }
 
-  void _fetchInitialTags() {
+  void _fetchInitialDatas() {
     final property = ref.read(propertyProvider);
-    ref.read(tagsProvider.notifier).fetchTags(
+    ref.read(loadedTagsProvider.notifier).fetchTags(
           fieldOrderBy: property == 'itemsCount'
               ? TagsField.itemsCount
               : TagsField.followersCount,
@@ -31,7 +33,7 @@ class ScrollControllerNotifier extends StateNotifier<ScrollController> {
   void _scrollListener() {
     if (state.position.pixels == state.position.maxScrollExtent) {
       final property = ref.read(propertyProvider);
-      ref.read(tagsProvider.notifier).fetchMoreTags(
+      ref.read(loadedTagsProvider.notifier).fetchMoreTags(
             fieldOrderBy: property == 'itemsCount'
                 ? TagsField.itemsCount
                 : TagsField.followersCount,

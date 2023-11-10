@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/pages/ranking/provider/property_provider.dart';
+import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 import 'package:qiita_trend/provider/qiita_auth_storage_provider.dart';
 import 'package:qiita_trend/routes/router.dart';
 import '/api/qiita_auth.dart';

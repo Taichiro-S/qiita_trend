@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/pages/ranking/provider/property_provider.dart';
+import 'package:qiita_trend/pages/ranking/widget/test_chart.dart';
+import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 import 'package:qiita_trend/pages/ranking/widget/tag_changes_widget.dart';
 import '/pages/ranking/model/tag_info.dart';
 import '/pages/ranking/widget/bar_indicator_widget.dart';
@@ -93,6 +94,7 @@ class TagContainerWidget extends ConsumerWidget {
                         ])
                       : const SizedBox(),
               // TagChangesWidget(tag: tag)
+              const TestChart()
             ],
           ),
         ));

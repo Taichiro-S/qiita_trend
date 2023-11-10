@@ -25,7 +25,7 @@ class QiitaProfilePage extends ConsumerWidget {
         ref.invalidate(qiitaProfileProvider);
       }
     });
-    if (webView['open']!) {
+    if (webView.isOpen) {
       return Scaffold(
           appBar: AppBar(
               title: Row(children: [
@@ -41,7 +41,7 @@ class QiitaProfilePage extends ConsumerWidget {
             Expanded(
                 child: Stack(children: <Widget>[
               const QiitaLoginPageWidget(),
-              webView['loading']!
+              webView.isLoading
                   ? Container(
                       color: Colors.white,
                       child: const Center(
