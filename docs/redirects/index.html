@@ -10,9 +10,15 @@
       var urlParams = new URLSearchParams(window.location.search);
       var authCode = urlParams.get("code");
       var authState = urlParams.get("state");
-      window.location.replace(
-        "qiitatrend://oauth/callback?code=" + authCode + "&state=" + authState
-      );
+      if (authCode == null || authState == null) {
+        window.location.replace(
+          "https://taichiro-s.github.io/qiita_trend/redirects/fallback.html"
+        );
+      } else {
+        window.location.replace(
+          "qiitatrend://oauth/callback?code=" + authCode + "&state=" + authState
+        );
+      }
     </script>
   </body>
 </html>
