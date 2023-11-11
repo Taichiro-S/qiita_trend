@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/routes/router.dart';
@@ -11,9 +13,13 @@ void main() async {
   await dotenv.load(fileName: '.env');
   runApp(
     ProviderScope(
-        child: MyApp(
-      appRouter: appRouter,
-    )),
+      child: DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(
+          appRouter: appRouter,
+        ), // Wrap your app
+      ),
+    ),
   );
 }
 
@@ -30,6 +36,9 @@ class MyApp extends StatelessWidget {
       ),
       routerConfig: appRouter.config(),
       debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      darkTheme: ThemeData.dark(),
     );
   }
 }

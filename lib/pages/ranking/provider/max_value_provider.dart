@@ -1,6 +1,4 @@
-import 'package:qiita_trend/constant/default_values.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '/pages/ranking/model/tag_change.dart';
 import '/pages/ranking/repository/tags_repository.dart';
 part 'max_value_provider.g.dart';
 

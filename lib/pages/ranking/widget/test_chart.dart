@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/pages/ranking/provider/tag_changes_provider.dart';
-import '/pages/ranking/model/tag_info.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TestChart extends StatelessWidget {
@@ -18,7 +15,7 @@ class TestChart extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              getTitlesWidget: (double value, TitleMeta meta) {
+              getTitlesWidget: (value, meta) {
                 // Format the value to a date or any other string
                 final DateTime date =
                     DateTime.fromMillisecondsSinceEpoch(value.toInt());
@@ -36,7 +33,7 @@ class TestChart extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 40,
-              getTitlesWidget: (double value, TitleMeta meta) {
+              getTitlesWidget: (value, meta) {
                 // Format the value to a string
                 final String text =
                     value.toStringAsFixed(1); // One decimal place

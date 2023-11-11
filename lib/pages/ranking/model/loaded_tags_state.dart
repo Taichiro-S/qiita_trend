@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:qiita_trend/pages/ranking/model/tag_change.dart';
 import 'package:qiita_trend/pages/ranking/model/tag_info.dart';
 part 'loaded_tags_state.freezed.dart';
 

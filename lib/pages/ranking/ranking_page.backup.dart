@@ -1,13 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
-import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
+import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 import 'package:qiita_trend/routes/router.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
+
 import '/pages/ranking/provider/tags_notifier_provider.dart';
 import 'widget/tag_container_widget.dart';
-import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class RankingPage extends ConsumerWidget {

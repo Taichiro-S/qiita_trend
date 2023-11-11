@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/url.dart';
 import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '/constant/url.dart';
 
 @RoutePage()
 class UserSettingsPage extends ConsumerWidget {
@@ -23,11 +22,11 @@ class UserSettingsPage extends ConsumerWidget {
           children: [
             Column(
               children: <String>['itemsCount', 'followersCount']
-                  .map((String property) => RadioListTile<String>(
+                  .map((property) => RadioListTile<String>(
                         title: Text(property),
                         value: property,
                         groupValue: selectedProperty,
-                        onChanged: (String? value) {
+                        onChanged: (value) {
                           if (value != null) {
                             propertyNotifier.change(value);
                           }

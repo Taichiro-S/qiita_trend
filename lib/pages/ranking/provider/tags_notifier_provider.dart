@@ -1,6 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
+
 import '/pages/ranking/model/tag_info.dart';
 import '/pages/ranking/repository/tags_repository.dart';
 

@@ -1,0 +1,11 @@
+.dart_tool
+.fvm
+build
+ios
+android
+linux
+macos
+windows
+node_modules
+functions
+.gitignore

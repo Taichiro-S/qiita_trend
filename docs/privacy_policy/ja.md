@@ -1,58 +1,58 @@
-**Privacy Policy**
+**プライバシーポリシー**
 
-Taichiro Sekiguchi built the Qiita Trend app as a Free app. This SERVICE is provided by Taichiro Sekiguchi at no cost and is intended for use as is.
+私は Qiita トレンドアプリを無料アプリとして構築しました。本サービスは、無償で提供され、そのままご利用いただけます。
 
-This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
+このページは本サービスを利用される方に、私の個人情報の収集、利用、開示に関する方針をお知らせするためのものです。
 
-If you choose to use my Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that I collect is used for providing and improving the Service. I will not use or share your information with anyone except as described in this Privacy Policy.
+本サービスを利用することを選択した場合、このポリシーに関連する情報の収集と使用に同意したものとみなされます。私が収集した個人情報は、サービスの提供および改善のために使用されます。私は、このプライバシーポリシーに記載されている場合を除き、あなたの情報を使用したり、誰と共有することはありません。
 
-The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which are accessible at Qiita Trend unless otherwise defined in this Privacy Policy.
+本プライバシーポリシーで使用される用語は、本プライバシーポリシーで別途定義されない限り、Qiita Trend でアクセス可能な当社の利用規約と同じ意味を有します。
 
-**Information Collection and Use**
+**情報の収集と使用**
 
-For a better experience, while using our Service, I may require you to provide us with certain personally identifiable information, including but not limited to qiita profile. The information that I request will be retained on your device and is not collected by me in any way.
+当サービスをより快適にご利用いただくために、qiita のアカウントでログインされた場合には。そのアカウントの情報を API を通じて要求し、アプリ上に表示することがあります。私が要求する情報は、あなたのデバイス上に保持され、いかなる方法においても私が収集することはありません。
 
-**Log Data**
+**ログデータについて**
 
-I want to inform you that whenever you use my Service, in a case of an error in the app I collect data and information (through third-party products) on your phone called Log Data. This Log Data may include information such as your device Internet Protocol (“IP”) address, device name, operating system version, the configuration of the app when utilizing my Service, the time and date of your use of the Service, and other statistics.
+あなたが私のサービスを使用するたびに、アプリでエラーが発生した場合、私は（サードパーティの製品を通じて）ログデータと呼ばれるあなたの携帯電話上のデータと情報を収集することをお知らせしたいと思います。このログデータには、お客様の端末のインターネットプロトコル（「IP」）アドレス、端末名、オペレーティングシステムのバージョン、私のサービスを利用する際のアプリの設定、お客様がサービスを利用した日時、その他の統計情報などが含まれる場合があります。
 
-**Cookies**
+**クッキー**
 
-Cookies are files with a small amount of data that are commonly used as anonymous unique identifiers. These are sent to your browser from the websites that you visit and are stored on your device's internal memory.
+クッキーは、一般的に匿名の一意の識別子として使用される少量のデータを含むファイルです。これらは、お客様が訪問したウェブサイトからお客様のブラウザに送信され、お客様のデバイスの内部メモリに保存されます。
 
-This Service does not use these “cookies” explicitly. However, the app may use third-party code and libraries that use “cookies” to collect information and improve their services. You have the option to either accept or refuse these cookies and know when a cookie is being sent to your device. If you choose to refuse our cookies, you may not be able to use some portions of this Service.
+本サービスでは、これらの「Cookie」を明示的に使用することはありません。ただし、本アプリは、情報を収集しサービスを向上させるために「Cookie」を使用するサードパーティのコードやライブラリを使用する場合があります。お客様は、これらのクッキーを受け入れるか拒否するかを選択し、クッキーがお客様のデバイスに送信されるタイミングを知ることができます。クッキーを拒否した場合、本サービスの一部をご利用いただけない場合があります。
 
-**Service Providers**
+**サービスプロバイダー**
 
-I may employ third-party companies and individuals due to the following reasons:
+私は、以下の理由により、第三者の企業や個人を雇用することがあります：
 
-- To facilitate our Service;
-- To provide the Service on our behalf;
-- To perform Service-related services; or
-- To assist us in analyzing how our Service is used.
+- 当社のサービスを円滑にするため；
+- 当社に代わって本サービスを提供するため；
+- サービス関連サービスの提供
+- 本サービスがどのように利用されているかを分析するため。
 
-I want to inform users of this Service that these third parties have access to their Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purpose.
+本サービスの利用者に、これらの第三者が利用者の個人情報にアクセスできることをお知らせします。その理由は、当社に代わって彼らに割り当てられた業務を遂行するためです。ただし、これらの第三者には、他のいかなる目的にも情報を開示または使用しない義務があります。
 
-**Security**
+**セキュリティについて**
 
-I value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and I cannot guarantee its absolute security.
+当社は、個人情報をご提供いただくお客様の信頼を第一と考え、個人情報の保護に努めております。しかし、インターネットを介した送信方法や電子的な保存方法は、100％安全で信頼できるものではなく、絶対的な安全性を保証するものではありません。
 
-**Links to Other Sites**
+**他のサイトへのリンク**
 
-This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by me. Therefore, I strongly advise you to review the Privacy Policy of these websites. I have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.
+本サービスには、他のサイトへのリンクが含まれている場合があります。第三者のリンクをクリックすると、そのサイトに移動します。これらの外部サイトは私が運営しているものではありません。したがって、これらのウェブサイトのプライバシーポリシーを確認することを強くお勧めします。私は、第三者のサイトやサービスのコンテンツ、プライバシー・ポリシー、慣行を管理することはなく、一切の責任を負いません。
 
-**Children’s Privacy**
+**子供のプライバシー**
 
-I do not knowingly collect personally identifiable information from children. I encourage all children to never submit any personally identifiable information through the Application and/or Services. I encourage parents and legal guardians to monitor their children's Internet usage and to help enforce this Policy by instructing their children never to provide personally identifiable information through the Application and/or Services without their permission. If you have reason to believe that a child has provided personally identifiable information to us through the Application and/or Services, please contact us. You must also be at least 16 years of age to consent to the processing of your personally identifiable information in your country (in some countries we may allow your parent or guardian to do so on your behalf).
+私は故意に子供から個人を特定できる情報を収集することはありません。私は、すべての児童がアプリケーションおよび/またはサービスを通じて個人を特定できる情報を送信しないよう奨励します。私は、両親および法的保護者が子供のインターネット利用を監視し、子供に許可なく本アプリケーションおよび/または本サービスを通じて個人を特定できる情報を提供しないよう指示することで、本ポリシーの実施を支援することを推奨します。お子様が本アプリケーションおよび/または本サービスを通じて個人を特定できる情報を当社に提供したと信じるに足る理由がある場合は、当社までご連絡ください。また、お客様の国において個人を特定できる情報を処理することに同意するには、16 歳以上である必要があります（国によっては、お客様の親または後見人がお客様に代わって処理することを許可する場合があります）。
 
-**Changes to This Privacy Policy**
+**プライバシーポリシーの変更**
 
-I may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. I will notify you of any changes by posting the new Privacy Policy on this page.
+個人情報保護方針を更新することがあります。従って、変更がないかどうか、定期的にこのページを確認することをお勧めします。変更があった場合は、このページに新しいプライバシーポリシーを掲載することでお知らせします。
 
-This policy is effective as of 2023-11-10
+このポリシーは 2023-11-10 より有効となります。
 
-**Contact Us**
+**お問い合わせ**
 
-If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at hokkaido_mx_1_t.s@me.com.
+私の個人情報保護方針についてご質問やご提案がございましたら、遠慮なく hokkaido_mx_1_t.s@me.com までご連絡ください。
 
-This privacy policy page was created at [privacypolicytemplate.net](https://privacypolicytemplate.net) and modified/generated by [App Privacy Policy Generator](https://app-privacy-policy-generator.nisrulz.com/)
+このプライバシーポリシーページは[privacypolicytemplate.net](https://privacypolicytemplate.net)で作成され、[App Privacy Policy Generator](https://app-privacy-policy-generator.nisrulz.com/)で修正/生成されました。

@@ -1,12 +1,10 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/constant/default_values.dart';
-import '/pages/qiita_profile/provider/uuid_provider.dart';
-import '/constant/url.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../service/secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:qiita_trend/constant/default_values.dart';
 import '/constant/storage_key.dart';
+import '/constant/url.dart';
+import '/service/secure_storage.dart';
 
 class QiitaAuth {
   final String clientId = dotenv.env['QIITA_CLIENT_ID']!;
@@ -49,8 +47,9 @@ class QiitaAuth {
     );
 
     if (response.statusCode == 201) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      return data['token'];
+      final Map<String, dynamic> data =
+          jsonDecode(response.body) as Map<String, dynamic>;
+      return data['token'].toString();
     } else {
       throw Exception('Failed to get access token: ${response.body}');
     }

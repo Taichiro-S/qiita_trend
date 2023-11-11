@@ -1,7 +1,7 @@
-import '../model/qiita_profile.dart';
-import '/constant/url.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '/constant/url.dart';
+import '/pages/qiita_profile/model/qiita_profile.dart';
 import '/service/secure_storage.dart';
 
 class QiitaProfileApi {
@@ -17,7 +17,8 @@ class QiitaProfileApi {
         },
       );
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data =
+            jsonDecode(response.body) as Map<String, dynamic>;
         return QiitaProfile.fromJson(data);
       } else {
         throw Exception(

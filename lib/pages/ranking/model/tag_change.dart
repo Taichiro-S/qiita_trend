@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 part 'tag_change.freezed.dart';
 
 @freezed
@@ -15,7 +15,7 @@ class TagChange with _$TagChange {
 
   factory TagChange.fromDocument(String id, DocumentSnapshot doc) {
     return TagChange(
-      createdAt: doc['date'],
+      createdAt: doc['date'] as Timestamp,
       followersCount: doc['followers_count'].toString(),
       itemsCount: doc['items_count'].toString(),
       followersChange: doc['followers_change'].toString(),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/pages/ranking/widget/test_chart.dart';
-import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 import 'package:qiita_trend/pages/ranking/widget/tag_changes_widget.dart';
+import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
+
 import '/pages/ranking/model/tag_info.dart';
 import '/pages/ranking/widget/bar_indicator_widget.dart';
 
@@ -18,12 +18,12 @@ class TagContainerWidget extends ConsumerWidget {
     String displayItemsCount;
     String displayFollowersCount;
     if (itemsCount > 1000) {
-      displayItemsCount = (itemsCount / 1000).toStringAsFixed(1) + 'k';
+      displayItemsCount = '${(itemsCount / 1000).toStringAsFixed(1)}k';
     } else {
       displayItemsCount = itemsCount.toString();
     }
     if (followersCount > 1000) {
-      displayFollowersCount = (followersCount / 1000).toStringAsFixed(1) + 'k';
+      displayFollowersCount = '${(followersCount / 1000).toStringAsFixed(1)}k';
     } else {
       displayFollowersCount = followersCount.toString();
     }
@@ -93,8 +93,8 @@ class TagContainerWidget extends ConsumerWidget {
                           ),
                         ])
                       : const SizedBox(),
-              // TagChangesWidget(tag: tag)
-              const TestChart()
+              TagChangesWidget(tag: tag)
+              // const TestChart()
             ],
           ),
         ));

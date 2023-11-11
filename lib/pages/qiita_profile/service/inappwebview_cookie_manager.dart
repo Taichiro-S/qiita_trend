@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 Future<List<Cookie>> getCookies(Uri uri) async {
@@ -21,7 +20,7 @@ Future<void> deleteCookies(Uri uri) async {
     for (var cookie in cookies) {
       if (cookie.name != 'secure_token' || cookie.name != 'user_session_key') {
         cookieManager.setCookie(
-            url: uri, name: cookie.name, value: cookie.value);
+            url: uri, name: cookie.name, value: cookie.value.toString());
       }
     }
   } catch (e) {
