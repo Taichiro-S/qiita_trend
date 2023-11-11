@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,7 +11,7 @@
       var authCode = urlParams.get("code");
       var authState = urlParams.get("state");
       window.location.replace(
-        "qiitatrend://oauth/callback?code=" + authCode + "&state=" + authState
+        "qiitatrend://oauth/callback?code=" + authCode + "&state=" + authState,
       );
     </script>
   </body>

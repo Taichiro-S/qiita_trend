@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,11 +12,14 @@
       var authState = urlParams.get("state");
       if (authCode == null || authState == null) {
         window.location.replace(
-          "https://taichiro-s.github.io/qiita_trend/redirects/fallback.html"
+          "https://taichiro-s.github.io/qiita_trend/redirects/fallback.html",
         );
       } else {
         window.location.replace(
-          "qiitatrend://oauth/callback?code=" + authCode + "&state=" + authState
+          "qiitatrend://oauth/callback?code=" +
+            authCode +
+            "&state=" +
+            authState,
         );
       }
     </script>
