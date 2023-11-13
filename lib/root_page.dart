@@ -10,9 +10,7 @@ class RootPage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: const [
         RankingRoute(),
-        // UserSettingsRoute(),
         QiitaProfileRoute(),
-        // TestARoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
@@ -24,18 +22,10 @@ class RootPage extends StatelessWidget {
               icon: Icon(Icons.leaderboard),
               label: 'Ranking',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.settings),
-            //   label: 'Settings',
-            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Profile',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.pin),
-            //   label: 'Test',
-            // ),
           ],
         );
       },

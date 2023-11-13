@@ -19,12 +19,16 @@ class QiitaLoginPageWidget extends ConsumerWidget {
     return InAppWebView(
       initialUrlRequest:
           URLRequest(url: Uri.parse(qiitaAuth.getAuthorizeUrl(state))),
+      initialOptions: InAppWebViewGroupOptions(
+          android: AndroidInAppWebViewOptions(
+              initialScale: 100, disableDefaultErrorPage: true)),
       onWebViewCreated: (controller) {
         webViewController = controller;
       },
       onLoadStart: (controller, url) async {
         if (url != null) {
           webViewNotifier.loading();
+          webViewNotifier.clearError();
           try {
             await deleteCookies(url);
             if (url.toString().contains('/oauth/callback')) {
@@ -47,11 +51,13 @@ class QiitaLoginPageWidget extends ConsumerWidget {
         webViewNotifier.loaded();
       },
       onLoadError: (controller, url, code, message) {
-        /*
-        issue:
-        we want to allow redirect to qiita://oauth/callback
-        but onLoadError is called when redirected to cusotom url schemes.
-        */
+        // allow redirect to qiitatrend://oauth/callback
+        if (url.toString().startsWith('qiitatrend') &&
+            url.toString().contains('/oauth/callback')) {
+          return;
+        }
+        debugPrint(message);
+        webViewNotifier.error(message);
       },
     );
   }

@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tag_changes_repository.dart';
+part of 'display_settings_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagChangesRepositoryHash() =>
-    r'0f7185fad2df5c04e424113c0d35de93a59ad3d6';
+String _$displaySettingsHash() => r'593ff3a0787c2deb0ba240b230ef80ab11cc0a59';
 
-/// See also [tagChangesRepository].
-@ProviderFor(tagChangesRepository)
-final tagChangesRepositoryProvider =
-    AutoDisposeProvider<TagChangesRepository>.internal(
-  tagChangesRepository,
-  name: r'tagChangesRepositoryProvider',
+/// See also [DisplaySettings].
+@ProviderFor(DisplaySettings)
+final displaySettingsProvider =
+    AutoDisposeNotifierProvider<DisplaySettings, DisplaySettingsState>.internal(
+  DisplaySettings.new,
+  name: r'displaySettingsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$tagChangesRepositoryHash,
+      : _$displaySettingsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef TagChangesRepositoryRef = AutoDisposeProviderRef<TagChangesRepository>;
+typedef _$DisplaySettings = AutoDisposeNotifier<DisplaySettingsState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

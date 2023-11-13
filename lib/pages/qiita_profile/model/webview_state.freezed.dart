@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$WebViewState {
   bool get isOpen => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isError => throw _privateConstructorUsedError;
+  String get errorText => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $WebViewStateCopyWith<WebViewState> get copyWith =>
@@ -30,7 +32,7 @@ abstract class $WebViewStateCopyWith<$Res> {
           WebViewState value, $Res Function(WebViewState) then) =
       _$WebViewStateCopyWithImpl<$Res, WebViewState>;
   @useResult
-  $Res call({bool isOpen, bool isLoading});
+  $Res call({bool isOpen, bool isLoading, bool isError, String errorText});
 }
 
 /// @nodoc
@@ -48,6 +50,8 @@ class _$WebViewStateCopyWithImpl<$Res, $Val extends WebViewState>
   $Res call({
     Object? isOpen = null,
     Object? isLoading = null,
+    Object? isError = null,
+    Object? errorText = null,
   }) {
     return _then(_value.copyWith(
       isOpen: null == isOpen
@@ -58,6 +62,14 @@ class _$WebViewStateCopyWithImpl<$Res, $Val extends WebViewState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isError: null == isError
+          ? _value.isError
+          : isError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorText: null == errorText
+          ? _value.errorText
+          : errorText // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -70,7 +82,7 @@ abstract class _$$WebViewStateImplCopyWith<$Res>
       __$$WebViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isOpen, bool isLoading});
+  $Res call({bool isOpen, bool isLoading, bool isError, String errorText});
 }
 
 /// @nodoc
@@ -86,6 +98,8 @@ class __$$WebViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isOpen = null,
     Object? isLoading = null,
+    Object? isError = null,
+    Object? errorText = null,
   }) {
     return _then(_$WebViewStateImpl(
       isOpen: null == isOpen
@@ -96,6 +110,14 @@ class __$$WebViewStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isError: null == isError
+          ? _value.isError
+          : isError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorText: null == errorText
+          ? _value.errorText
+          : errorText // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -103,16 +125,24 @@ class __$$WebViewStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$WebViewStateImpl implements _WebViewState {
-  const _$WebViewStateImpl({required this.isOpen, required this.isLoading});
+  const _$WebViewStateImpl(
+      {required this.isOpen,
+      required this.isLoading,
+      required this.isError,
+      required this.errorText});
 
   @override
   final bool isOpen;
   @override
   final bool isLoading;
+  @override
+  final bool isError;
+  @override
+  final String errorText;
 
   @override
   String toString() {
-    return 'WebViewState(isOpen: $isOpen, isLoading: $isLoading)';
+    return 'WebViewState(isOpen: $isOpen, isLoading: $isLoading, isError: $isError, errorText: $errorText)';
   }
 
   @override
@@ -122,11 +152,15 @@ class _$WebViewStateImpl implements _WebViewState {
             other is _$WebViewStateImpl &&
             (identical(other.isOpen, isOpen) || other.isOpen == isOpen) &&
             (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading));
+                other.isLoading == isLoading) &&
+            (identical(other.isError, isError) || other.isError == isError) &&
+            (identical(other.errorText, errorText) ||
+                other.errorText == errorText));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isOpen, isLoading);
+  int get hashCode =>
+      Object.hash(runtimeType, isOpen, isLoading, isError, errorText);
 
   @JsonKey(ignore: true)
   @override
@@ -138,12 +172,18 @@ class _$WebViewStateImpl implements _WebViewState {
 abstract class _WebViewState implements WebViewState {
   const factory _WebViewState(
       {required final bool isOpen,
-      required final bool isLoading}) = _$WebViewStateImpl;
+      required final bool isLoading,
+      required final bool isError,
+      required final String errorText}) = _$WebViewStateImpl;
 
   @override
   bool get isOpen;
   @override
   bool get isLoading;
+  @override
+  bool get isError;
+  @override
+  String get errorText;
   @override
   @JsonKey(ignore: true)
   _$$WebViewStateImplCopyWith<_$WebViewStateImpl> get copyWith =>

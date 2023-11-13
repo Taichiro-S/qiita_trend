@@ -1,25 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tags_repository.dart';
+part of 'ranked_tags_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagsRepositoryHash() => r'2c52595284886510b06c476c64ed96f122d6335f';
+String _$rankedTagsRepositoryHash() =>
+    r'80579190e0d0dd84b4bbf0aa65268e5b7cff4c56';
 
-/// See also [tagsRepository].
-@ProviderFor(tagsRepository)
-final tagsRepositoryProvider = AutoDisposeProvider<TagsRepository>.internal(
-  tagsRepository,
-  name: r'tagsRepositoryProvider',
+/// See also [rankedTagsRepository].
+@ProviderFor(rankedTagsRepository)
+final rankedTagsRepositoryProvider =
+    AutoDisposeProvider<RankedTagsRepository>.internal(
+  rankedTagsRepository,
+  name: r'rankedTagsRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$tagsRepositoryHash,
+      : _$rankedTagsRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef TagsRepositoryRef = AutoDisposeProviderRef<TagsRepository>;
+typedef RankedTagsRepositoryRef = AutoDisposeProviderRef<RankedTagsRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

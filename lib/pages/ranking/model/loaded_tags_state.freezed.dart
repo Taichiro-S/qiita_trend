@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoadedTagsState {
-  AsyncValue<List<TagInfo>> get tags => throw _privateConstructorUsedError;
+  AsyncValue<List<RankedTag>> get rankedTags =>
+      throw _privateConstructorUsedError;
   DocumentSnapshot<Object?>? get lastDoc => throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
 
@@ -32,7 +33,7 @@ abstract class $LoadedTagsStateCopyWith<$Res> {
       _$LoadedTagsStateCopyWithImpl<$Res, LoadedTagsState>;
   @useResult
   $Res call(
-      {AsyncValue<List<TagInfo>> tags,
+      {AsyncValue<List<RankedTag>> rankedTags,
       DocumentSnapshot<Object?>? lastDoc,
       bool isLoadingMore});
 }
@@ -50,15 +51,15 @@ class _$LoadedTagsStateCopyWithImpl<$Res, $Val extends LoadedTagsState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tags = null,
+    Object? rankedTags = null,
     Object? lastDoc = freezed,
     Object? isLoadingMore = null,
   }) {
     return _then(_value.copyWith(
-      tags: null == tags
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<List<TagInfo>>,
+      rankedTags: null == rankedTags
+          ? _value.rankedTags
+          : rankedTags // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTag>>,
       lastDoc: freezed == lastDoc
           ? _value.lastDoc
           : lastDoc // ignore: cast_nullable_to_non_nullable
@@ -80,7 +81,7 @@ abstract class _$$LoadedTagsStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {AsyncValue<List<TagInfo>> tags,
+      {AsyncValue<List<RankedTag>> rankedTags,
       DocumentSnapshot<Object?>? lastDoc,
       bool isLoadingMore});
 }
@@ -96,15 +97,15 @@ class __$$LoadedTagsStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tags = null,
+    Object? rankedTags = null,
     Object? lastDoc = freezed,
     Object? isLoadingMore = null,
   }) {
     return _then(_$LoadedTagsStateImpl(
-      tags: null == tags
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as AsyncValue<List<TagInfo>>,
+      rankedTags: null == rankedTags
+          ? _value.rankedTags
+          : rankedTags // ignore: cast_nullable_to_non_nullable
+              as AsyncValue<List<RankedTag>>,
       lastDoc: freezed == lastDoc
           ? _value.lastDoc
           : lastDoc // ignore: cast_nullable_to_non_nullable
@@ -121,10 +122,12 @@ class __$$LoadedTagsStateImplCopyWithImpl<$Res>
 
 class _$LoadedTagsStateImpl implements _LoadedTagsState {
   const _$LoadedTagsStateImpl(
-      {required this.tags, required this.lastDoc, required this.isLoadingMore});
+      {required this.rankedTags,
+      required this.lastDoc,
+      required this.isLoadingMore});
 
   @override
-  final AsyncValue<List<TagInfo>> tags;
+  final AsyncValue<List<RankedTag>> rankedTags;
   @override
   final DocumentSnapshot<Object?>? lastDoc;
   @override
@@ -132,7 +135,7 @@ class _$LoadedTagsStateImpl implements _LoadedTagsState {
 
   @override
   String toString() {
-    return 'LoadedTagsState(tags: $tags, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore)';
+    return 'LoadedTagsState(rankedTags: $rankedTags, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore)';
   }
 
   @override
@@ -140,14 +143,16 @@ class _$LoadedTagsStateImpl implements _LoadedTagsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedTagsStateImpl &&
-            (identical(other.tags, tags) || other.tags == tags) &&
+            (identical(other.rankedTags, rankedTags) ||
+                other.rankedTags == rankedTags) &&
             (identical(other.lastDoc, lastDoc) || other.lastDoc == lastDoc) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, tags, lastDoc, isLoadingMore);
+  int get hashCode =>
+      Object.hash(runtimeType, rankedTags, lastDoc, isLoadingMore);
 
   @JsonKey(ignore: true)
   @override
@@ -159,12 +164,12 @@ class _$LoadedTagsStateImpl implements _LoadedTagsState {
 
 abstract class _LoadedTagsState implements LoadedTagsState {
   const factory _LoadedTagsState(
-      {required final AsyncValue<List<TagInfo>> tags,
+      {required final AsyncValue<List<RankedTag>> rankedTags,
       required final DocumentSnapshot<Object?>? lastDoc,
       required final bool isLoadingMore}) = _$LoadedTagsStateImpl;
 
   @override
-  AsyncValue<List<TagInfo>> get tags;
+  AsyncValue<List<RankedTag>> get rankedTags;
   @override
   DocumentSnapshot<Object?>? get lastDoc;
   @override

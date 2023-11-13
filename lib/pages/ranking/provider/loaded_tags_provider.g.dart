@@ -6,7 +6,7 @@ part of 'loaded_tags_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loadedTagsHash() => r'16a6672bb632ff1c722a449b4f9b71845c0ade5b';
+String _$loadedTagsHash() => r'96e12c3b761e0e2f49ae8901bf748547e9de85ea';
 
 /// See also [LoadedTags].
 @ProviderFor(LoadedTags)

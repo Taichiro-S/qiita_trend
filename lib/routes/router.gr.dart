@@ -15,6 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    DisplaySettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DisplaySettingsPage(),
+      );
+    },
     QiitaProfileRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -33,13 +39,21 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RootPage(),
       );
     },
-    UserSettingsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const UserSettingsPage(),
-      );
-    },
   };
+}
+
+/// generated route for
+/// [DisplaySettingsPage]
+class DisplaySettingsRoute extends PageRouteInfo<void> {
+  const DisplaySettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          DisplaySettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DisplaySettingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -80,20 +94,6 @@ class RootRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RootRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [UserSettingsPage]
-class UserSettingsRoute extends PageRouteInfo<void> {
-  const UserSettingsRoute({List<PageRouteInfo>? children})
-      : super(
-          UserSettingsRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'UserSettingsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

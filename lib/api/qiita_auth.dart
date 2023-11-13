@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:qiita_trend/constant/default_values.dart';
+import 'package:qiita_trend/constant/default_value.dart';
 import '/constant/storage_key.dart';
 import '/constant/url.dart';
 import '/service/secure_storage.dart';

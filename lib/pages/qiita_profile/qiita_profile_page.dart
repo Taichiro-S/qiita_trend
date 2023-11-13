@@ -5,6 +5,8 @@ import 'package:qiita_trend/api/qiita_auth.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/webview_provider.dart';
 import 'package:qiita_trend/pages/qiita_profile/widget/qiita_login_page_widget.dart';
 import 'package:qiita_trend/provider/qiita_auth_storage_provider.dart';
+import 'package:qiita_trend/theme/app_colors.dart';
+import 'package:qiita_trend/theme/app_theme.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
 import '/pages/qiita_profile/provider/qiita_profile_provider.dart';
 
@@ -41,14 +43,26 @@ class QiitaProfilePage extends ConsumerWidget {
             Expanded(
                 child: Stack(children: <Widget>[
               const QiitaLoginPageWidget(),
-              webView.isLoading
+              webView.isError
                   ? Container(
                       color: Colors.white,
-                      child: const Center(
-                          child: CircleLoadingWidget(
-                              color: Colors.green, fontSize: 20)),
-                    )
-                  : Container()
+                      child: Center(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                            Text(webView.errorText,
+                                style:
+                                    TextStyle(color: AppColors.light().onError))
+                          ])))
+                  : webView.isLoading
+                      ? Container(
+                          color: Colors.white,
+                          child: const Center(
+                              child: CircleLoadingWidget(
+                                  color: Colors.green, fontSize: 20)),
+                        )
+                      : Container()
             ]))
           ]));
     } else {

@@ -6,7 +6,7 @@ part of 'webview_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$webViewHash() => r'4a8a953da17f7a1887016d8a82a748ed35bb2d94';
+String _$webViewHash() => r'd8d8450ee3cf439a6be202d3eab06afad910621c';
 
 /// See also [WebView].
 @ProviderFor(WebView)

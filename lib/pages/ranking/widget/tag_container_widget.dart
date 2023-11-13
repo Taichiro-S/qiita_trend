@@ -1,102 +1,143 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/pages/ranking/widget/tag_changes_widget.dart';
-import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
-
-import '/pages/ranking/model/tag_info.dart';
+import 'package:qiita_trend/constant/default_value.dart';
+import 'package:qiita_trend/constant/firestore_arg.dart';
+import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
+import 'package:qiita_trend/pages/ranking/model/ranked_tag.dart';
+import 'package:qiita_trend/pages/ranking/service/display_num.dart';
 import '/pages/ranking/widget/bar_indicator_widget.dart';
 
 class TagContainerWidget extends ConsumerWidget {
-  const TagContainerWidget({super.key, required this.tag});
-  final TagInfo tag;
+  const TagContainerWidget({super.key, required this.rankedTag});
+  final RankedTag rankedTag;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final property = ref.watch(propertyProvider);
-    final itemsCount = int.parse(tag.itemsCount);
-    final followersCount = int.parse(tag.followersCount);
-    String displayItemsCount;
-    String displayFollowersCount;
-    if (itemsCount > 1000) {
-      displayItemsCount = '${(itemsCount / 1000).toStringAsFixed(1)}k';
-    } else {
-      displayItemsCount = itemsCount.toString();
+    final displaySettings = ref.watch(displaySettingsProvider);
+    String displayItemsCount = displayNum(rankedTag.itemsCount);
+    String displayFollowersCount = displayNum(rankedTag.followersCount);
+    String displayItemsCountChange = displayNum(rankedTag.itemsCountChange);
+    String displayFollowersCountChange =
+        displayNum(rankedTag.followersCountChange);
+    if (displaySettings.sortOrder == RankedTagsSortOrder.itemsCountChange &&
+        rankedTag.itemsCountChange < DEFAULT_ITEMS_CHANGE_CUTOFF) {
+      return Container();
     }
-    if (followersCount > 1000) {
-      displayFollowersCount = '${(followersCount / 1000).toStringAsFixed(1)}k';
-    } else {
-      displayFollowersCount = followersCount.toString();
+    if (displaySettings.sortOrder == RankedTagsSortOrder.follwersCountChange &&
+        rankedTag.followersCountChange < DEFAULT_FOLLOWERS_CHANGE_CUTOFF) {
+      return Container();
     }
-
     return Card(
-        elevation: 3,
-        margin: const EdgeInsets.all(8),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.white70,
-            backgroundImage: tag.iconUrl != null
-                ? NetworkImage(tag.iconUrl!)
-                : const AssetImage('assets/images/no_image.png')
-                    as ImageProvider<Object>,
-            radius: 20,
-          ),
+      elevation: 3,
+      margin: const EdgeInsets.all(8),
+      child: ListTile(
+          leading: Column(children: [
+            CircleAvatar(
+              backgroundColor: Colors.white70,
+              backgroundImage: rankedTag.iconUrl != null
+                  ? CachedNetworkImageProvider(rankedTag.iconUrl!)
+                  : const AssetImage('assets/images/no_image.png')
+                      as ImageProvider<Object>,
+              radius: 20,
+            )
+          ]),
           title: Text(
-            tag.id,
+            rankedTag.id,
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Column(
-            children: [
-              property == 'itemsCount'
-                  ? Row(children: [
-                      const Icon(
-                        Icons.description,
-                        size: 18,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      BarIndicator(
-                          value: itemsCount, property: 'maxItemsCount'),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        displayItemsCount,
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ])
-                  : property == 'followersCount'
-                      ? Row(children: [
-                          const Icon(
-                            Icons.person,
-                            size: 18,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          BarIndicator(
-                              value: followersCount,
-                              property: 'maxFollowersCount'),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            displayFollowersCount,
-                            style: const TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ])
-                      : const SizedBox(),
-              TagChangesWidget(tag: tag)
-              // const TestChart()
-            ],
+          subtitle: displaySettings.sortOrder == RankedTagsSortOrder.itemsCount
+              ? BarIndicator(
+                  value: rankedTag.itemsCount.toDouble(),
+                  displayCount: displayItemsCount)
+              : displaySettings.sortOrder == RankedTagsSortOrder.followersCount
+                  ? BarIndicator(
+                      value: rankedTag.followersCount.toDouble(),
+                      displayCount: displayFollowersCount)
+                  : displaySettings.sortOrder ==
+                          RankedTagsSortOrder.itemsCountChange
+                      ? BarIndicator(
+                          value: rankedTag.itemsCountChange.toDouble(),
+                          displayCount: displayItemsCountChange)
+                      : BarIndicator(
+                          value: rankedTag.followersCountChange.toDouble(),
+                          displayCount: displayFollowersCountChange)
+          // subtitle: Column(
+          //   children: [
+
+          //     Row(children: [
+          //       const Icon(
+          //         Icons.description,
+          //         size: 18,
+          //       ),
+          //       const SizedBox(
+          //         width: 5,
+          //       ),
+          //       displaySettings.sortOrder == RankedTagsSortOrder.itemsCount
+          //           ? Row(children: [
+          //               BarIndicator(value: rankedTag.itemsCount.toDouble()),
+          //               const SizedBox(
+          //                 width: 5,
+          //               ),
+          //               Text(
+          //                 displayItemsCount,
+          //                 style: const TextStyle(
+          //                   fontSize: 16,
+          //                 ),
+          //               )
+          //             ])
+          //           : displaySettings.sortOrder ==
+          //                   RankedTagsSortOrder.followersCount
+          //               ? Row(children: [
+          //                   BarIndicator(
+          //                       value: rankedTag.followersCount.toDouble()),
+          //                   const SizedBox(
+          //                     width: 5,
+          //                   ),
+          //                   Text(
+          //                     displayFollowersCount,
+          //                     style: const TextStyle(
+          //                       fontSize: 16,
+          //                     ),
+          //                   )
+          //                 ])
+          //               : displaySettings.sortOrder ==
+          //                       RankedTagsSortOrder.itemsCountChange
+          //                   ? Row(children: [
+          //                       BarIndicator(
+          //                           value:
+          //                               rankedTag.itemsCountChange.toDouble()),
+          //                       const SizedBox(
+          //                         width: 5,
+          //                       ),
+          //                       Text(
+          //                         displayItemsCountChange,
+          //                         style: const TextStyle(
+          //                           fontSize: 16,
+          //                         ),
+          //                       )
+          //                     ])
+          //                   : Row(children: [
+          //                       BarIndicator(
+          //                           value: rankedTag.followersCountChange
+          //                               .toDouble()),
+          //                       const SizedBox(
+          //                         width: 5,
+          //                       ),
+          //                       Text(
+          //                         displayFollowersCountChange,
+          //                         style: const TextStyle(
+          //                           fontSize: 16,
+          //                         ),
+          //                       )
+          //                     ])
+          //     ])
+          //   ],
+          // )
           ),
-        ));
+    );
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/constant/firestore_arg.dart';
+import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
-import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
 
 final scrollControllerProvider =
     StateNotifierProvider<ScrollControllerNotifier, ScrollController>(
@@ -20,22 +19,19 @@ class ScrollControllerNotifier extends StateNotifier<ScrollController> {
   }
 
   void _fetchInitialDatas() {
-    final property = ref.read(propertyProvider);
-    ref.read(loadedTagsProvider.notifier).fetchTags(
-          fieldOrderBy: property == 'itemsCount'
-              ? TagsField.itemsCount
-              : TagsField.followersCount,
-        );
+    final displaySettings = ref.read(displaySettingsProvider);
+    ref.read(loadedTagsProvider.notifier).fetchRankedTags(
+        timePeriod: displaySettings.timePeriod,
+        sortOrder: displaySettings.sortOrder);
   }
 
   void _scrollListener() {
     if (state.position.pixels == state.position.maxScrollExtent) {
-      final property = ref.read(propertyProvider);
-      ref.read(loadedTagsProvider.notifier).fetchMoreTags(
-            fieldOrderBy: property == 'itemsCount'
-                ? TagsField.itemsCount
-                : TagsField.followersCount,
-          );
+      final displaySettings = ref.read(displaySettingsProvider);
+
+      ref.read(loadedTagsProvider.notifier).fetchMoreRankedTags(
+          timePeriod: displaySettings.timePeriod,
+          sortOrder: displaySettings.sortOrder);
     }
   }
 

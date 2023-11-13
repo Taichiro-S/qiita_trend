@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
 import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
-import 'package:qiita_trend/pages/user_settings/provider/property_provider.dart';
+import 'package:qiita_trend/pages/display_settings/model/display_settings_state.dart';
+import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:qiita_trend/routes/router.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
 
@@ -16,58 +17,71 @@ class RankingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scrollController = ref.watch(scrollControllerProvider);
     final loadedTagsAsync = ref.watch(loadedTagsProvider);
-    final selectedpPoperty = ref.watch(propertyProvider);
+    final scrollController = ref.watch(scrollControllerProvider);
+    final displaySettings = ref.watch(displaySettingsProvider);
+
     final router = AutoRouter.of(context);
 
-    ref.listen<String>(propertyProvider, (previousState, state) {
+    ref.listen<DisplaySettingsState>(displaySettingsProvider,
+        (previousState, state) {
       if (state != previousState) {
-        ref.read(loadedTagsProvider.notifier).fetchTags(
-            fieldOrderBy: state == 'itemsCount'
-                ? TagsField.itemsCount
-                : TagsField.followersCount);
+        ref.read(loadedTagsProvider.notifier).fetchRankedTags(
+            timePeriod: state.timePeriod, sortOrder: state.sortOrder);
       }
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('タグランキング'),
+        title: displaySettings.timePeriod == Collection.monthlyRanking &&
+                displaySettings.sortOrder ==
+                    RankedTagsSortOrder.itemsCountChange
+            ? const Text('月間記事数ランキング')
+            : displaySettings.timePeriod == Collection.monthlyRanking &&
+                    displaySettings.sortOrder ==
+                        RankedTagsSortOrder.follwersCountChange
+                ? const Text('月間フォロワー数ランキング')
+                : displaySettings.timePeriod == Collection.weeklyRanking &&
+                        displaySettings.sortOrder ==
+                            RankedTagsSortOrder.itemsCountChange
+                    ? const Text('週間記事数ランキング')
+                    : const Text('週間フォロワー数ランキング'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              router.push(const UserSettingsRoute());
+              router.push(const DisplaySettingsRoute());
             },
           ),
         ],
       ),
-      body: loadedTagsAsync.tags.when(
+      body: loadedTagsAsync.rankedTags.when(
         loading: () => const Center(
             child: CircleLoadingWidget(color: Colors.green, fontSize: 20)),
         error: (error, stack) => Center(child: Text('エラー: $error')),
-        data: (tags) {
+        data: (rankedTags) {
           return RefreshIndicator(
             child: ListView.builder(
               controller: scrollController,
-              itemCount: tags.length + (loadedTagsAsync.isLoadingMore ? 1 : 0),
+              itemCount:
+                  rankedTags.length + (loadedTagsAsync.isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
-                if (loadedTagsAsync.isLoadingMore && index == tags.length) {
+                if (loadedTagsAsync.isLoadingMore &&
+                    index == rankedTags.length) {
                   return const Center(
                       child: CircularProgressIndicator(
                     color: Colors.green,
                   ));
                 }
 
-                final tag = tags[index];
-                return TagContainerWidget(tag: tag);
+                final rankedTag = rankedTags[index];
+                return TagContainerWidget(rankedTag: rankedTag);
               },
             ),
             onRefresh: () async {
-              ref.read(loadedTagsProvider.notifier).fetchTags(
-                  fieldOrderBy: selectedpPoperty == 'itemsCount'
-                      ? TagsField.itemsCount
-                      : TagsField.followersCount);
+              ref.read(loadedTagsProvider.notifier).fetchRankedTags(
+                  timePeriod: displaySettings.timePeriod,
+                  sortOrder: displaySettings.sortOrder);
             },
           );
         },

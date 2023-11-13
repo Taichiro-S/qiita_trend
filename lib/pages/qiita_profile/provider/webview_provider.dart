@@ -6,11 +6,21 @@ part 'webview_provider.g.dart';
 class WebView extends _$WebView {
   @override
   WebViewState build() {
-    return const WebViewState(isOpen: false, isLoading: false);
+    return const WebViewState(
+        isOpen: false, isLoading: false, isError: false, errorText: '');
   }
 
   void show() => state = state.copyWith(isOpen: true);
   void hide() => state = state.copyWith(isOpen: false);
   void loading() => state = state.copyWith(isLoading: true);
   void loaded() => state = state.copyWith(isLoading: false);
+  void error(String msg) {
+    state = state.copyWith(isError: true);
+    state = state.copyWith(errorText: msg);
+  }
+
+  void clearError() {
+    state = state.copyWith(isError: false);
+    state = state.copyWith(errorText: '');
+  }
 }
