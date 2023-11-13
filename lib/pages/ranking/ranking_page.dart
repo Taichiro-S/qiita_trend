@@ -2,14 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
-import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
 import 'package:qiita_trend/pages/display_settings/model/display_settings_state.dart';
 import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
+import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
+import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
+import 'package:qiita_trend/pages/ranking/widget/tag_container_widget.dart';
 import 'package:qiita_trend/routes/router.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
-
-import '/pages/ranking/provider/loaded_tags_provider.dart';
-import 'widget/tag_container_widget.dart';
 
 @RoutePage()
 class RankingPage extends ConsumerWidget {
@@ -18,7 +17,7 @@ class RankingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loadedTagsAsync = ref.watch(loadedTagsProvider);
-    final scrollController = ref.watch(scrollControllerProvider);
+    final scrollController = ref.watch(scrollControllerNotifierProvider);
     final displaySettings = ref.watch(displaySettingsProvider);
 
     final router = AutoRouter.of(context);
@@ -57,7 +56,7 @@ class RankingPage extends ConsumerWidget {
       ),
       body: loadedTagsAsync.rankedTags.when(
         loading: () => const Center(
-            child: CircleLoadingWidget(color: Colors.green, fontSize: 20)),
+            child: CircleLoadingWidget(color: Colors.blue, fontSize: 20)),
         error: (error, stack) => Center(child: Text('エラー: $error')),
         data: (rankedTags) {
           return RefreshIndicator(
@@ -70,7 +69,7 @@ class RankingPage extends ConsumerWidget {
                     index == rankedTags.length) {
                   return const Center(
                       child: CircularProgressIndicator(
-                    color: Colors.green,
+                    color: Colors.blue,
                   ));
                 }
 

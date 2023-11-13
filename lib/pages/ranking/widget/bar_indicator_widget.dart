@@ -12,7 +12,7 @@ class BarIndicator extends ConsumerWidget {
     Key? key,
     required this.value,
     required this.displayCount,
-    this.color = Colors.green,
+    this.color = Colors.blue,
   }) : super(key: key);
 
   @override
@@ -70,10 +70,10 @@ class BarIndicator extends ConsumerWidget {
           )
         ]);
       },
-      loading: () => const Flexible(
+      loading: () => Flexible(
         fit: FlexFit.loose,
         child: LinearProgressIndicator(
-          color: Colors.green,
+          color: color,
         ),
       ),
       error: (e, s) {

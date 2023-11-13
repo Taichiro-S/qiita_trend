@@ -5,7 +5,7 @@ class CircleLoadingWidget extends StatelessWidget {
   final Color color;
 
   const CircleLoadingWidget(
-      {Key? key, this.fontSize = 20, this.color = Colors.green})
+      {Key? key, this.fontSize = 20, this.color = Colors.blue})
       : super(key: key);
 
   @override

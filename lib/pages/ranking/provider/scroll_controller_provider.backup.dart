@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'scroll_controller_provider.g.dart';
+final scrollControllerProvider =
+    StateNotifierProvider<ScrollControllerNotifier, ScrollController>(
+  (ref) => ScrollControllerNotifier(ref),
+);
 
-@riverpod
-class ScrollControllerNotifier extends _$ScrollControllerNotifier {
-  @override
-  ScrollController build() {
-    final ScrollController controller = ScrollController();
-    controller.addListener(_scrollListener);
+class ScrollControllerNotifier extends StateNotifier<ScrollController> {
+  final Ref ref;
+
+  ScrollControllerNotifier(this.ref) : super(ScrollController()) {
+    state.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchInitialDatas();
     });
-    return controller;
   }
 
   void _fetchInitialDatas() {
@@ -32,5 +33,11 @@ class ScrollControllerNotifier extends _$ScrollControllerNotifier {
           timePeriod: displaySettings.timePeriod,
           sortOrder: displaySettings.sortOrder);
     }
+  }
+
+  @override
+  void dispose() {
+    state.removeListener(_scrollListener);
+    super.dispose();
   }
 }

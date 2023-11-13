@@ -5,7 +5,9 @@ import 'package:qiita_trend/constant/default_value.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
 import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/model/ranked_tag.dart';
+import 'package:qiita_trend/pages/ranking/model/tag_history.dart';
 import 'package:qiita_trend/pages/ranking/service/display_num.dart';
+import 'package:qiita_trend/pages/ranking/widget/tag_history_widget.dart';
 import '/pages/ranking/widget/bar_indicator_widget.dart';
 
 class TagContainerWidget extends ConsumerWidget {
@@ -32,112 +34,47 @@ class TagContainerWidget extends ConsumerWidget {
       elevation: 3,
       margin: const EdgeInsets.all(8),
       child: ListTile(
-          leading: Column(children: [
-            CircleAvatar(
-              backgroundColor: Colors.white70,
-              backgroundImage: rankedTag.iconUrl != null
-                  ? CachedNetworkImageProvider(rankedTag.iconUrl!)
-                  : const AssetImage('assets/images/no_image.png')
-                      as ImageProvider<Object>,
-              radius: 20,
-            )
-          ]),
-          title: Text(
-            rankedTag.id,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+        leading: Column(children: [
+          CircleAvatar(
+            backgroundColor: Colors.white70,
+            backgroundImage: rankedTag.iconUrl != null
+                ? CachedNetworkImageProvider(rankedTag.iconUrl!)
+                : const AssetImage('assets/images/no_image.png')
+                    as ImageProvider<Object>,
+            radius: 20,
+          )
+        ]),
+        title: Text(
+          rankedTag.id,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-          subtitle: displaySettings.sortOrder == RankedTagsSortOrder.itemsCount
-              ? BarIndicator(
-                  value: rankedTag.itemsCount.toDouble(),
-                  displayCount: displayItemsCount)
-              : displaySettings.sortOrder == RankedTagsSortOrder.followersCount
-                  ? BarIndicator(
-                      value: rankedTag.followersCount.toDouble(),
-                      displayCount: displayFollowersCount)
-                  : displaySettings.sortOrder ==
-                          RankedTagsSortOrder.itemsCountChange
-                      ? BarIndicator(
-                          value: rankedTag.itemsCountChange.toDouble(),
-                          displayCount: displayItemsCountChange)
-                      : BarIndicator(
-                          value: rankedTag.followersCountChange.toDouble(),
-                          displayCount: displayFollowersCountChange)
-          // subtitle: Column(
-          //   children: [
-
-          //     Row(children: [
-          //       const Icon(
-          //         Icons.description,
-          //         size: 18,
-          //       ),
-          //       const SizedBox(
-          //         width: 5,
-          //       ),
-          //       displaySettings.sortOrder == RankedTagsSortOrder.itemsCount
-          //           ? Row(children: [
-          //               BarIndicator(value: rankedTag.itemsCount.toDouble()),
-          //               const SizedBox(
-          //                 width: 5,
-          //               ),
-          //               Text(
-          //                 displayItemsCount,
-          //                 style: const TextStyle(
-          //                   fontSize: 16,
-          //                 ),
-          //               )
-          //             ])
-          //           : displaySettings.sortOrder ==
-          //                   RankedTagsSortOrder.followersCount
-          //               ? Row(children: [
-          //                   BarIndicator(
-          //                       value: rankedTag.followersCount.toDouble()),
-          //                   const SizedBox(
-          //                     width: 5,
-          //                   ),
-          //                   Text(
-          //                     displayFollowersCount,
-          //                     style: const TextStyle(
-          //                       fontSize: 16,
-          //                     ),
-          //                   )
-          //                 ])
-          //               : displaySettings.sortOrder ==
-          //                       RankedTagsSortOrder.itemsCountChange
-          //                   ? Row(children: [
-          //                       BarIndicator(
-          //                           value:
-          //                               rankedTag.itemsCountChange.toDouble()),
-          //                       const SizedBox(
-          //                         width: 5,
-          //                       ),
-          //                       Text(
-          //                         displayItemsCountChange,
-          //                         style: const TextStyle(
-          //                           fontSize: 16,
-          //                         ),
-          //                       )
-          //                     ])
-          //                   : Row(children: [
-          //                       BarIndicator(
-          //                           value: rankedTag.followersCountChange
-          //                               .toDouble()),
-          //                       const SizedBox(
-          //                         width: 5,
-          //                       ),
-          //                       Text(
-          //                         displayFollowersCountChange,
-          //                         style: const TextStyle(
-          //                           fontSize: 16,
-          //                         ),
-          //                       )
-          //                     ])
-          //     ])
-          //   ],
-          // )
-          ),
+        ),
+        subtitle: Column(
+          children: [
+            displaySettings.sortOrder == RankedTagsSortOrder.itemsCount
+                ? BarIndicator(
+                    value: rankedTag.itemsCount.toDouble(),
+                    displayCount: displayItemsCount)
+                : displaySettings.sortOrder ==
+                        RankedTagsSortOrder.followersCount
+                    ? BarIndicator(
+                        value: rankedTag.followersCount.toDouble(),
+                        displayCount: displayFollowersCount)
+                    : displaySettings.sortOrder ==
+                            RankedTagsSortOrder.itemsCountChange
+                        ? BarIndicator(
+                            value: rankedTag.itemsCountChange.toDouble(),
+                            displayCount: displayItemsCountChange)
+                        : BarIndicator(
+                            value: rankedTag.followersCountChange.toDouble(),
+                            displayCount: displayFollowersCountChange),
+            const SizedBox(height: 5),
+            TagHistoryWidget(rankedTag: rankedTag),
+          ],
+        ),
+      ),
     );
   }
 }
