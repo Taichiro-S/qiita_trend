@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qiita_trend/constant/default_value.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
 import 'package:qiita_trend/pages/display_settings/model/display_settings_state.dart';
 import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/scroll_controller_provider.dart';
 import 'package:qiita_trend/pages/ranking/widget/tag_container_widget.dart';
+import 'package:qiita_trend/pages/ranking/widget/tag_history_widget.dart';
 import 'package:qiita_trend/routes/router.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
 
@@ -74,7 +76,28 @@ class RankingPage extends ConsumerWidget {
                 }
 
                 final rankedTag = rankedTags[index];
-                return TagContainerWidget(rankedTag: rankedTag);
+                if (displaySettings.sortOrder ==
+                        RankedTagsSortOrder.itemsCountChange &&
+                    rankedTag.itemsCountChange < DEFAULT_ITEMS_CHANGE_CUTOFF) {
+                  return Container();
+                }
+                if (displaySettings.sortOrder ==
+                        RankedTagsSortOrder.follwersCountChange &&
+                    rankedTag.followersCountChange <
+                        DEFAULT_FOLLOWERS_CHANGE_CUTOFF) {
+                  return Container();
+                }
+                return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        TagContainerWidget(rankedTag: rankedTag),
+                        Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: TagHistoryWidget(rankedTag: rankedTag)),
+                      ],
+                    ));
               },
             ),
             onRefresh: () async {

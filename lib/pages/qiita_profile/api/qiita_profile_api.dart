@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '/constant/url.dart';
 import '/pages/qiita_profile/model/qiita_profile.dart';
 import '/service/secure_storage.dart';
+
+part 'qiita_profile_api.g.dart';
 
 class QiitaProfileApi {
   Future<QiitaProfile> getProfile() async {
@@ -28,4 +31,9 @@ class QiitaProfileApi {
       throw Exception('Failed to get profile: $e');
     }
   }
+}
+
+@riverpod
+QiitaProfileApi qiitaProfileApi(QiitaProfileApiRef ref) {
+  return QiitaProfileApi();
 }

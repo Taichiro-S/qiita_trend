@@ -1,17 +1,22 @@
+const QIITA_API_V2_TAGS =
+  'https://qiita.com/api/v2/tags?per_page=100&sort=count&page='
+const TIME_TO_FETCH_TAGS = '0 0,6,12,18 * * *'
+const TIME_TO_CALC_RANKING = '30 11 * * *'
+const WEEKLY_ITEMS_COUNT_CUTOFF = 7
+const MONTHLY_ITEMS_COUNT_CUTOFF = 30
+const WEEKLY_FOLLOWERS_COUNT_CUTOFF = 7
+const MONTHLY_FOLLOWERS_COUNT_CUTOFF = 30
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 const axios = require('axios')
 
-const QIITA_API_V2_TAGS =
-  'https://qiita.com/api/v2/tags?per_page=100&sort=count&page='
-const timeToFetch = '0 0,6,12,18 * * *'
 admin.initializeApp()
 const db = admin.firestore()
-// 毎日0,6,12,18時にQiitaの上位1000個分のタグ情報を取得してFirestoreに保存する
 
+// 毎日0,6,12,18時にQiitaの上位1000個分のタグ情報を取得してFirestoreに保存する
 exports.fetchQiitaTags = functions
   .runWith({ timeoutSeconds: 540 })
-  .pubsub.schedule(timeToFetch)
+  .pubsub.schedule(TIME_TO_FETCH_TAGS)
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
@@ -54,7 +59,8 @@ exports.fetchQiitaTags = functions
             }
             await historyCurrentRef.set(historyData)
           } else {
-            // If previous history document doesn't exist, calculate change from recent data(at least 1 data should exist).
+            // If previous history document doesn't exist, 
+            // calculate change from recent data.
             const historyRecentPreviousRef = tagRef
               .collection('history')
               .where('date', '<', end)
@@ -101,25 +107,20 @@ exports.fetchQiitaTags = functions
   })
 
 // 毎日6:30に、Firestoreに保存されているタグ情報を元に、ランキングを作成する
-const timeToCalculateRanking = '25 15 * * *'
-const weeklyItemsCountCutoff = 5
-const monthlyItemsCountCutoff = 10
-const weeklyFollowersCountCutoff = 5
-const monthlyFollowersCountCutoff = 10
-
 exports.calculateWeeklyRanking = functions
   .runWith({ timeoutSeconds: 540 })
-  .pubsub.schedule(timeToCalculateRanking)
+  .pubsub.schedule(TIME_TO_CALC_RANKING)
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
-      const getDayRange = (date) => {
-        const startOfDay = new Date(date)
-        startOfDay.setHours(0, 0, 0, 0)
-        const endOfDay = new Date(date)
-        endOfDay.setHours(23, 59, 59, 999)
-        return { startOfDay, endOfDay }
-      }
+      console.log(QIITA_API_V2_TAGS, TIME_TO_FETCH_TAGS, TIME_TO_CALC_RANKING)
+      // const getDayRange = (date) => {
+      //   const startOfDay = new Date(date)
+      //   startOfDay.setHours(0, 0, 0, 0)
+      //   const endOfDay = new Date(date)
+      //   endOfDay.setHours(23, 59, 59, 999)
+      //   return { startOfDay, endOfDay }
+      // }
       const getOneDayRange = (date) => {
         const startOfDay = new Date(date)
         startOfDay.setHours(startOfDay.getHours() - 24)
@@ -135,13 +136,13 @@ exports.calculateWeeklyRanking = functions
         thisWeek.push({ startOfDay, endOfDay })
       }
       const { startOfDay: startOfToday, endOfDay: endOfToday } =
-        getDayRange(now)
+      getOneDayRange(now)
       const { startOfDay: startOfOneWeekAgo, endOfDay: endOfOneWeekAgo } =
-        getDayRange(oneWeekAgo)
+      getOneDayRange(oneWeekAgo)
 
       const tagsRef = db.collection('tags')
       const tagsSnapshot = await tagsRef.get()
-
+      console.log(startOfOneWeekAgo, endOfOneWeekAgo, startOfToday, endOfToday)
       const weeklyRankRef = db
         .collection('weeklyRanking')
         .doc(now.toISOString())
@@ -177,15 +178,15 @@ exports.calculateWeeklyRanking = functions
             oneWeekAgoSnapshot.docs[0].data().followers_count
         }
         if (
-          weeklyFollowersCountChange < weeklyFollowersCountCutoff &&
-          weeklyItemsCountChange < weeklyItemsCountCutoff
+          weeklyFollowersCountChange < WEEKLY_FOLLOWERS_COUNT_CUTOFF &&
+          weeklyItemsCountChange < WEEKLY_ITEMS_COUNT_CUTOFF
         ) {
           continue
         }
 
         // 一週間分の変化を取得
-        let weeklyItemsCountChanges = []
-        let weeklyFollowersCountChanges = []
+        let weeklyItemsCountHistory = []
+        let weeklyFollowersCountHistory = []
         for (const day of thisWeek) {
           const daySnapshot = await historyRef
             .where('date', '>=', day.startOfDay)
@@ -193,10 +194,10 @@ exports.calculateWeeklyRanking = functions
             .orderBy('date', 'desc')
             .limit(4)
             .get()
-          
+
           if (daySnapshot.docs.length < 4) {
-            weeklyItemsCountChanges = []
-            weeklyFollowersCountChanges = []
+            weeklyItemsCountHistory = []
+            weeklyFollowersCountHistory = []
             break
           }
           let itemsCountChange = 0
@@ -207,37 +208,60 @@ exports.calculateWeeklyRanking = functions
           for (let i = 0; i < 4; i++) {
             followersCountChange += daySnapshot.docs[i].data().followers_change
           }
-          weeklyItemsCountChanges.push({
+          // if (weeklyItemsCountChange > weeklyItemsCountCutoff) {
+          //   const weeklyItemsCountHistoryRef = weeklyTagRef
+          //   .collection('items_count_history')
+          //   .doc(day.endOfDay.toISOString())
+          //   await weeklyItemsCountHistoryRef.set({
+          //     day: day.endOfDay,
+          //     item_count_change: itemsCountChange,
+          //   })
+          // }
+          // if (weeklyFollowersCountChange > weeklyFollowersCountCutoff) {
+          //   const weeklyFollowersCountHistoryRef = weeklyTagRef
+          //   .collection('followers_count_history')
+          //   .doc(day.endOfDay.toISOString())
+          //   await weeklyFollowersCountHistoryRef.set({
+          //     day: day.endOfDay,
+          //     followers_count_change: followersCountChange,
+          //   })
+          // }
+          weeklyItemsCountHistory.push({
             day: day.endOfDay,
-            itemsCountChange: itemsCountChange,
+            change: itemsCountChange,
           })
-          weeklyFollowersCountChanges.push({
+          weeklyFollowersCountHistory.push({
             day: day.endOfDay,
-            followersCountChange: followersCountChange,
+            change: followersCountChange,
           })
         }
-        if (weeklyFollowersCountChanges.length < 7) {
-          weeklyItemsCountChanges = []
+        if (weeklyFollowersCountHistory.length < 7) {
+          weeklyItemsCountHistory = []
         }
-        if (weeklyItemsCountChanges.length < 7) {
-          weeklyFollowersCountChanges = []
+        if (weeklyItemsCountHistory.length < 7) {
+          weeklyFollowersCountHistory = []
         }
+        const weeklyFollowersCountHistoryJson = weeklyFollowersCountHistory.reduce((acc, item) => {
+          acc[item.day.toISOString()] = item.change;
+          return acc;
+        }, {});
+        const weeklyItemsCountHistoryJson = weeklyItemsCountHistory.reduce((acc, item) => {
+          acc[item.day.toISOString()] = item.change;
+          return acc;
+        }, {});
         weeklyTagRef.set({
           id: tagId,
           icon_url: tagDoc.data().icon_url,
-          items_count: currentSnapshot.empty
-            ? 0
-            : currentSnapshot.docs[0].data().items_count,
-          followers_count: currentSnapshot.empty
-            ? 0
-            : currentSnapshot.docs[0].data().followers_count,
+          items_count: currentSnapshot.docs[0].data().items_count,
+          followers_count: currentSnapshot.docs[0].data().followers_count,
           items_count_change: weeklyItemsCountChange,
           followers_count_change: weeklyFollowersCountChange,
-          items_count_history: weeklyItemsCountChanges,
-          followers_count_history: weeklyFollowersCountChanges,
+          items_count_history: weeklyItemsCountHistoryJson,
+          followers_count_history: weeklyFollowersCountHistoryJson,
           date: now,
         })
       }
+
       return null
     } catch (error) {
       console.error('Error calculating ranking:', error.message)
@@ -250,7 +274,7 @@ exports.calculateWeeklyRanking = functions
 
 exports.calculateMonthlyRanking = functions
   .runWith({ timeoutSeconds: 540 })
-  .pubsub.schedule(timeToCalculateRanking)
+  .pubsub.schedule(TIME_TO_CALC_RANKING)
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
@@ -280,7 +304,7 @@ exports.calculateMonthlyRanking = functions
       const monthlyRankRef = db
         .collection('monthlyRanking')
         .doc(now.toISOString())
-        await monthlyRankRef.set({ date: now })
+      await monthlyRankRef.set({ date: now })
       for (const tagDoc of tagsSnapshot.docs) {
         const tagId = tagDoc.id
         const monthlyTagRef = monthlyRankRef.collection('tags').doc(tagId)
@@ -311,15 +335,24 @@ exports.calculateMonthlyRanking = functions
             oneMonthAgoSnapshot.docs[0].data().followers_count
         }
         if (
-          monthlyFollowersCountChange < monthlyFollowersCountCutoff &&
-          monthlyItemsCountChange < monthlyItemsCountCutoff
+          monthlyFollowersCountChange < MONTHLY_FOLLOWERS_COUNT_CUTOFF &&
+          monthlyItemsCountChange < MONTHLY_ITEMS_COUNT_CUTOFF
         ) {
           continue
         }
+        monthlyTagRef.set({
+          id: tagId,
+          icon_url: tagDoc.data().icon_url,
+          items_count: currentSnapshot.docs[0].data().items_count,
+          followers_count: currentSnapshot.docs[0].data().followers_count,
+          items_count_change: monthlyItemsCountChange,
+          followers_count_change: monthlyFollowersCountChange,
+          date: now,
+        })
 
         // 一ヶ月分の変化を取得
-        let monthlyItemsCountChanges = []
-        let monthlyFollowersCountChanges = []
+        // let monthlyItemsCountChanges = []
+        // let monthlyFollowersCountChanges = []
         for (const day of thisMonth) {
           const daySnapshot = await historyRef
             .where('date', '>=', day.startOfDay)
@@ -328,8 +361,8 @@ exports.calculateMonthlyRanking = functions
             .limit(4)
             .get()
           if (daySnapshot.docs.length < 4) {
-            monthlyItemsCountChanges = []
-            monthlyFollowersCountChanges = []
+            // monthlyItemsCountChanges = []
+            // monthlyFollowersCountChanges = []
             break
           }
           let itemsCountChange = 0
@@ -340,36 +373,25 @@ exports.calculateMonthlyRanking = functions
           for (let i = 0; i < 4; i++) {
             followersCountChange += daySnapshot.docs[i].data().followers_change
           }
-          monthlyItemsCountChanges.push({
-            day: day.endOfDay,
-            itemsCountChange: itemsCountChange,
-          })
-          monthlyFollowersCountChanges.push({
-            day: day.endOfDay,
-            followersCountChange: followersCountChange,
-          })
+          if (monthlyItemsCountChange > MONTHLY_ITEMS_COUNT_CUTOFF) {
+            const monthlyItemsCountHistoryRef = monthlyTagRef
+              .collection('items_count_history')
+              .doc(day.endOfDay.toISOString())
+            await monthlyItemsCountHistoryRef.set({
+              day: day.endOfDay,
+              items_count: itemsCountChange,
+            })
+          }
+          if (monthlyFollowersCountChange > MONTHLY_FOLLOWERS_COUNT_CUTOFF) {
+            const monthlyFollowersCountHistoryRef = monthlyTagRef
+              .collection('followers_count_history')
+              .doc(day.endOfDay.toISOString())
+            await monthlyFollowersCountHistoryRef.set({
+              day: day.endOfDay,
+              followers_count: followersCountChange,
+            })
+          }
         }
-        if (monthlyFollowersCountChanges.length < 30) {
-          monthlyItemsCountChanges = []
-        }
-        if (monthlyItemsCountChanges.length < 30) {
-          monthlyFollowersCountChanges = []
-        }
-        monthlyTagRef.set({
-          id: tagId,
-          icon_url: tagDoc.data().icon_url,
-          items_count: currentSnapshot.empty
-            ? 0
-            : currentSnapshot.docs[0].data().items_count,
-          followers_count: currentSnapshot.empty
-            ? 0
-            : currentSnapshot.docs[0].data().followers_count,
-          items_count_change: monthlyItemsCountChange,
-          followers_count_change: monthlyFollowersCountChange,
-          items_count_history: monthlyItemsCountChanges,
-          followers_count_history: monthlyFollowersCountChanges,
-          date: now,
-        })
       }
       return null
     } catch (error) {
