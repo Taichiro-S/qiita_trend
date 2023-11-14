@@ -63,3 +63,33 @@ enum RankedTagsSortOrder {
     }
   }
 }
+
+enum HistoryProperty {
+  follwersCountHistory,
+  itemsCountHistory,
+  weeklyHistory,
+  monthlyHistory,
+  ;
+
+  String get name {
+    switch (this) {
+      case HistoryProperty.follwersCountHistory:
+        return 'followers_count_history';
+      case HistoryProperty.itemsCountHistory:
+        return 'items_count_history';
+      default:
+        return '';
+    }
+  }
+
+  int get length {
+    switch (this) {
+      case HistoryProperty.weeklyHistory:
+        return 7;
+      case HistoryProperty.monthlyHistory:
+        return 30;
+      default:
+        return 0;
+    }
+  }
+}

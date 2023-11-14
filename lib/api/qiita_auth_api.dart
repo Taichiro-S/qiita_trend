@@ -6,7 +6,7 @@ import '/constant/storage_key.dart';
 import '/constant/url.dart';
 import '/service/secure_storage.dart';
 
-class QiitaAuth {
+class QiitaAuthApi {
   final String clientId = dotenv.env['QIITA_CLIENT_ID']!;
   final String clientSecret = dotenv.env['QIITA_CLIENT_SECRET']!;
   final String scope = QIITA_SCOPE;

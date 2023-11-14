@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/uuid_provider.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/webview_provider.dart';
 import 'package:qiita_trend/provider/qiita_auth_storage_provider.dart';
-import '/api/qiita_auth.dart';
+import '../../../api/qiita_auth_api.dart';
 import '../service/inappwebview_cookie_manager.dart';
 
 class QiitaLoginPageWidget extends ConsumerWidget {
@@ -12,13 +12,13 @@ class QiitaLoginPageWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final QiitaAuth qiitaAuth = QiitaAuth();
+    final qiitaAuth = QiitaAuthApi();
     InAppWebViewController? webViewController;
     final webViewNotifier = ref.read(webViewProvider.notifier);
-    final state = ref.read(uuidProvider);
+    final uuid = ref.read(uuidProvider);
     return InAppWebView(
       initialUrlRequest:
-          URLRequest(url: Uri.parse(qiitaAuth.getAuthorizeUrl(state))),
+          URLRequest(url: Uri.parse(qiitaAuth.getAuthorizeUrl(uuid))),
       initialOptions: InAppWebViewGroupOptions(
           android: AndroidInAppWebViewOptions(
               initialScale: 100, disableDefaultErrorPage: true)),
@@ -32,7 +32,7 @@ class QiitaLoginPageWidget extends ConsumerWidget {
           try {
             await deleteCookies(url);
             if (url.toString().contains('/oauth/callback')) {
-              await qiitaAuth.login(url, state);
+              await qiitaAuth.login(url, uuid);
               webViewNotifier.hide();
               ref.invalidate(qiitaAuthStorageProvider);
             }

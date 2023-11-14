@@ -25,8 +25,10 @@ mixin _$RankedTag {
   DocumentSnapshot<Object?> get documentSnapshot =>
       throw _privateConstructorUsedError;
   String? get iconUrl => throw _privateConstructorUsedError;
-  List<dynamic>? get followerCountHistory => throw _privateConstructorUsedError;
-  List<dynamic>? get itemsCountHistory => throw _privateConstructorUsedError;
+  List<TagHistoryState>? get followersCountHistory =>
+      throw _privateConstructorUsedError;
+  List<TagHistoryState>? get itemsCountHistory =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RankedTagCopyWith<RankedTag> get copyWith =>
@@ -47,8 +49,8 @@ abstract class $RankedTagCopyWith<$Res> {
       int itemsCountChange,
       DocumentSnapshot<Object?> documentSnapshot,
       String? iconUrl,
-      List<dynamic>? followerCountHistory,
-      List<dynamic>? itemsCountHistory});
+      List<TagHistoryState>? followersCountHistory,
+      List<TagHistoryState>? itemsCountHistory});
 }
 
 /// @nodoc
@@ -72,7 +74,7 @@ class _$RankedTagCopyWithImpl<$Res, $Val extends RankedTag>
     Object? itemsCountChange = null,
     Object? documentSnapshot = null,
     Object? iconUrl = freezed,
-    Object? followerCountHistory = freezed,
+    Object? followersCountHistory = freezed,
     Object? itemsCountHistory = freezed,
   }) {
     return _then(_value.copyWith(
@@ -108,14 +110,14 @@ class _$RankedTagCopyWithImpl<$Res, $Val extends RankedTag>
           ? _value.iconUrl
           : iconUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      followerCountHistory: freezed == followerCountHistory
-          ? _value.followerCountHistory
-          : followerCountHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+      followersCountHistory: freezed == followersCountHistory
+          ? _value.followersCountHistory
+          : followersCountHistory // ignore: cast_nullable_to_non_nullable
+              as List<TagHistoryState>?,
       itemsCountHistory: freezed == itemsCountHistory
           ? _value.itemsCountHistory
           : itemsCountHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<TagHistoryState>?,
     ) as $Val);
   }
 }
@@ -137,8 +139,8 @@ abstract class _$$RankedTagImplCopyWith<$Res>
       int itemsCountChange,
       DocumentSnapshot<Object?> documentSnapshot,
       String? iconUrl,
-      List<dynamic>? followerCountHistory,
-      List<dynamic>? itemsCountHistory});
+      List<TagHistoryState>? followersCountHistory,
+      List<TagHistoryState>? itemsCountHistory});
 }
 
 /// @nodoc
@@ -160,7 +162,7 @@ class __$$RankedTagImplCopyWithImpl<$Res>
     Object? itemsCountChange = null,
     Object? documentSnapshot = null,
     Object? iconUrl = freezed,
-    Object? followerCountHistory = freezed,
+    Object? followersCountHistory = freezed,
     Object? itemsCountHistory = freezed,
   }) {
     return _then(_$RankedTagImpl(
@@ -196,14 +198,14 @@ class __$$RankedTagImplCopyWithImpl<$Res>
           ? _value.iconUrl
           : iconUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      followerCountHistory: freezed == followerCountHistory
-          ? _value._followerCountHistory
-          : followerCountHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+      followersCountHistory: freezed == followersCountHistory
+          ? _value._followersCountHistory
+          : followersCountHistory // ignore: cast_nullable_to_non_nullable
+              as List<TagHistoryState>?,
       itemsCountHistory: freezed == itemsCountHistory
           ? _value._itemsCountHistory
           : itemsCountHistory // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<TagHistoryState>?,
     ));
   }
 }
@@ -220,9 +222,9 @@ class _$RankedTagImpl with DiagnosticableTreeMixin implements _RankedTag {
       required this.itemsCountChange,
       required this.documentSnapshot,
       this.iconUrl,
-      final List<dynamic>? followerCountHistory,
-      final List<dynamic>? itemsCountHistory})
-      : _followerCountHistory = followerCountHistory,
+      final List<TagHistoryState>? followersCountHistory,
+      final List<TagHistoryState>? itemsCountHistory})
+      : _followersCountHistory = followersCountHistory,
         _itemsCountHistory = itemsCountHistory;
 
   @override
@@ -241,20 +243,20 @@ class _$RankedTagImpl with DiagnosticableTreeMixin implements _RankedTag {
   final DocumentSnapshot<Object?> documentSnapshot;
   @override
   final String? iconUrl;
-  final List<dynamic>? _followerCountHistory;
+  final List<TagHistoryState>? _followersCountHistory;
   @override
-  List<dynamic>? get followerCountHistory {
-    final value = _followerCountHistory;
+  List<TagHistoryState>? get followersCountHistory {
+    final value = _followersCountHistory;
     if (value == null) return null;
-    if (_followerCountHistory is EqualUnmodifiableListView)
-      return _followerCountHistory;
+    if (_followersCountHistory is EqualUnmodifiableListView)
+      return _followersCountHistory;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
-  final List<dynamic>? _itemsCountHistory;
+  final List<TagHistoryState>? _itemsCountHistory;
   @override
-  List<dynamic>? get itemsCountHistory {
+  List<TagHistoryState>? get itemsCountHistory {
     final value = _itemsCountHistory;
     if (value == null) return null;
     if (_itemsCountHistory is EqualUnmodifiableListView)
@@ -265,7 +267,7 @@ class _$RankedTagImpl with DiagnosticableTreeMixin implements _RankedTag {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RankedTag(id: $id, date: $date, followersCount: $followersCount, itemsCount: $itemsCount, followersCountChange: $followersCountChange, itemsCountChange: $itemsCountChange, documentSnapshot: $documentSnapshot, iconUrl: $iconUrl, followerCountHistory: $followerCountHistory, itemsCountHistory: $itemsCountHistory)';
+    return 'RankedTag(id: $id, date: $date, followersCount: $followersCount, itemsCount: $itemsCount, followersCountChange: $followersCountChange, itemsCountChange: $itemsCountChange, documentSnapshot: $documentSnapshot, iconUrl: $iconUrl, followersCountHistory: $followersCountHistory, itemsCountHistory: $itemsCountHistory)';
   }
 
   @override
@@ -281,7 +283,7 @@ class _$RankedTagImpl with DiagnosticableTreeMixin implements _RankedTag {
       ..add(DiagnosticsProperty('itemsCountChange', itemsCountChange))
       ..add(DiagnosticsProperty('documentSnapshot', documentSnapshot))
       ..add(DiagnosticsProperty('iconUrl', iconUrl))
-      ..add(DiagnosticsProperty('followerCountHistory', followerCountHistory))
+      ..add(DiagnosticsProperty('followersCountHistory', followersCountHistory))
       ..add(DiagnosticsProperty('itemsCountHistory', itemsCountHistory));
   }
 
@@ -304,7 +306,7 @@ class _$RankedTagImpl with DiagnosticableTreeMixin implements _RankedTag {
                 other.documentSnapshot == documentSnapshot) &&
             (identical(other.iconUrl, iconUrl) || other.iconUrl == iconUrl) &&
             const DeepCollectionEquality()
-                .equals(other._followerCountHistory, _followerCountHistory) &&
+                .equals(other._followersCountHistory, _followersCountHistory) &&
             const DeepCollectionEquality()
                 .equals(other._itemsCountHistory, _itemsCountHistory));
   }
@@ -320,7 +322,7 @@ class _$RankedTagImpl with DiagnosticableTreeMixin implements _RankedTag {
       itemsCountChange,
       documentSnapshot,
       iconUrl,
-      const DeepCollectionEquality().hash(_followerCountHistory),
+      const DeepCollectionEquality().hash(_followersCountHistory),
       const DeepCollectionEquality().hash(_itemsCountHistory));
 
   @JsonKey(ignore: true)
@@ -340,8 +342,8 @@ abstract class _RankedTag implements RankedTag {
       required final int itemsCountChange,
       required final DocumentSnapshot<Object?> documentSnapshot,
       final String? iconUrl,
-      final List<dynamic>? followerCountHistory,
-      final List<dynamic>? itemsCountHistory}) = _$RankedTagImpl;
+      final List<TagHistoryState>? followersCountHistory,
+      final List<TagHistoryState>? itemsCountHistory}) = _$RankedTagImpl;
 
   @override
   String get id;
@@ -360,9 +362,9 @@ abstract class _RankedTag implements RankedTag {
   @override
   String? get iconUrl;
   @override
-  List<dynamic>? get followerCountHistory;
+  List<TagHistoryState>? get followersCountHistory;
   @override
-  List<dynamic>? get itemsCountHistory;
+  List<TagHistoryState>? get itemsCountHistory;
   @override
   @JsonKey(ignore: true)
   _$$RankedTagImplCopyWith<_$RankedTagImpl> get copyWith =>

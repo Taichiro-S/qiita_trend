@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:qiita_trend/pages/ranking/model/tag_history.dart';
+import 'package:qiita_trend/pages/ranking/model/tag_history_state.dart';
 
 part 'ranked_tag.freezed.dart';
 
@@ -16,9 +16,28 @@ class RankedTag with _$RankedTag {
       required int itemsCountChange,
       required DocumentSnapshot documentSnapshot,
       String? iconUrl,
-      List<dynamic>? followerCountHistory,
-      List<dynamic>? itemsCountHistory}) = _RankedTag;
+      List<TagHistoryState>? followersCountHistory,
+      List<TagHistoryState>? itemsCountHistory}) = _RankedTag;
+
   factory RankedTag.fromDocument(DocumentSnapshot doc) {
+    List<TagHistoryState> followersCountHistory = [];
+    List<TagHistoryState> itemsCountHistory = [];
+    (doc['followers_count_history'] as Map<String, dynamic>)
+        .forEach((key, value) {
+      DateTime dateTime = DateTime.parse(key);
+      Timestamp timestamp = Timestamp.fromDate(dateTime);
+      int change = value as int;
+      followersCountHistory
+          .add(TagHistoryState(date: timestamp, change: change));
+    });
+    (doc['items_count_history'] as Map<String, dynamic>).forEach((key, value) {
+      DateTime dateTime = DateTime.parse(key);
+      Timestamp timestamp = Timestamp.fromDate(dateTime);
+      int change = value as int;
+      itemsCountHistory.add(TagHistoryState(date: timestamp, change: change));
+    });
+    itemsCountHistory.sort((a, b) => a.date.compareTo(b.date));
+    followersCountHistory.sort((a, b) => a.date.compareTo(b.date));
     return RankedTag(
       id: doc['id'].toString(),
       date: doc['date'] as Timestamp,
@@ -28,8 +47,8 @@ class RankedTag with _$RankedTag {
       itemsCountChange: doc['items_count_change'] as int,
       documentSnapshot: doc,
       iconUrl: doc['icon_url'] as String?,
-      followerCountHistory: doc['followers_count_history'] as List<dynamic>?,
-      itemsCountHistory: doc['items_count_history'] as List<dynamic>?,
+      followersCountHistory: followersCountHistory,
+      itemsCountHistory: itemsCountHistory,
     );
   }
 }
