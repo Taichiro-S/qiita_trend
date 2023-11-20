@@ -1,6 +1,6 @@
 import 'package:qiita_trend/constant/default_value.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
-import 'package:qiita_trend/pages/display_settings/model/display_settings_state.dart';
+import 'package:qiita_trend/pages/ranking/model/display_settings_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'display_settings_provider.g.dart';
 
@@ -9,7 +9,9 @@ class DisplaySettings extends _$DisplaySettings {
   @override
   DisplaySettingsState build() {
     return const DisplaySettingsState(
-        timePeriod: DEFAULT_TIME_PERIOD, sortOrder: DEFAULT_SORT_ORDER);
+        timePeriod: DEFAULT_TIME_PERIOD,
+        sortOrder: DEFAULT_SORT_ORDER,
+        showChart: true);
   }
 
   void changeTimePeriod(Collection timePeriod) {
@@ -35,5 +37,9 @@ class DisplaySettings extends _$DisplaySettings {
       state =
           state.copyWith(sortOrder: RankedTagsSortOrder.follwersCountChange);
     }
+  }
+
+  void toggleShowChart() {
+    state = state.copyWith(showChart: !state.showChart);
   }
 }

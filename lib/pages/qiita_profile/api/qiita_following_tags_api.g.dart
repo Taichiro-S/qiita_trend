@@ -1,26 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'display_settings_provider.dart';
+part of 'qiita_following_tags_api.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$displaySettingsHash() => r'593ff3a0787c2deb0ba240b230ef80ab11cc0a59';
+String _$qiitaFollowingTagsApiHash() =>
+    r'e7974a2dcb537d319bbe0f6342f1ed225cd7ff65';
 
-/// See also [DisplaySettings].
-@ProviderFor(DisplaySettings)
-final displaySettingsProvider =
-    AutoDisposeNotifierProvider<DisplaySettings, DisplaySettingsState>.internal(
-  DisplaySettings.new,
-  name: r'displaySettingsProvider',
+/// See also [qiitaFollowingTagsApi].
+@ProviderFor(qiitaFollowingTagsApi)
+final qiitaFollowingTagsApiProvider =
+    AutoDisposeProvider<QiitaFollowingTagsApi>.internal(
+  qiitaFollowingTagsApi,
+  name: r'qiitaFollowingTagsApiProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$displaySettingsHash,
+      : _$qiitaFollowingTagsApiHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$DisplaySettings = AutoDisposeNotifier<DisplaySettingsState>;
+typedef QiitaFollowingTagsApiRef
+    = AutoDisposeProviderRef<QiitaFollowingTagsApi>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

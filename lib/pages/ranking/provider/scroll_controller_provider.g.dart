@@ -7,7 +7,7 @@ part of 'scroll_controller_provider.dart';
 // **************************************************************************
 
 String _$scrollControllerNotifierHash() =>
-    r'99018017de45806918230e42384d70392a8d6029';
+    r'6ed9ba836d681b0aa6ec1ac0b592d3e1f141b20f';
 
 /// See also [ScrollControllerNotifier].
 @ProviderFor(ScrollControllerNotifier)

@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'qiita_profile.freezed.dart';
@@ -7,21 +9,21 @@ part 'qiita_profile.g.dart';
 class QiitaProfile with _$QiitaProfile {
   const factory QiitaProfile({
     required String? description,
-    required String? facebookId,
-    required int? followeesCount,
-    required int? followersCount,
-    required String? githubLoginName,
-    required String? id,
-    required int? itemsCount,
-    required String? linkedinId,
+    @JsonKey(name: 'facebook_id') required String? facebookId,
+    @JsonKey(name: 'followees_count') required int? followeesCount,
+    @JsonKey(name: 'followers_count') required int? followersCount,
+    @JsonKey(name: 'github_login_name') required String? githubLoginName,
+    required String id,
+    @JsonKey(name: 'items_count') required int? itemsCount,
+    @JsonKey(name: 'linkedin_id') required String? linkedinId,
     required String? location,
     required String? name,
     required String? organization,
-    required int? permanentId,
-    required String? profileImageUrl,
+    @JsonKey(name: 'permanent_id') required int? permanentId,
+    @JsonKey(name: 'profile_image_url') required String? profileImageUrl,
     required bool? teamOnly,
-    required String? twitterScreenName,
-    required String? websiteUrl,
+    @JsonKey(name: 'twitter_screen_name') required String? twitterScreenName,
+    @JsonKey(name: 'website_url') required String? websiteUrl,
   }) = _QiitaProfile;
 
   factory QiitaProfile.fromJson(Map<String, dynamic> json) =>

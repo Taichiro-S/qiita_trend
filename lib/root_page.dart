@@ -10,21 +10,23 @@ class RootPage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: const [
         RankingRoute(),
-        QiitaProfileRoute(),
+        UserSettingsRoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
+          // elevation: 10,
+
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard),
               label: 'Ranking',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
+              icon: Icon(Icons.settings),
+              label: 'Settings',
             ),
           ],
         );

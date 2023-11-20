@@ -21,20 +21,30 @@ QiitaProfile _$QiitaProfileFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$QiitaProfile {
   String? get description => throw _privateConstructorUsedError;
+  @JsonKey(name: 'facebook_id')
   String? get facebookId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'followees_count')
   int? get followeesCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'followers_count')
   int? get followersCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'github_login_name')
   String? get githubLoginName => throw _privateConstructorUsedError;
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'items_count')
   int? get itemsCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'linkedin_id')
   String? get linkedinId => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get organization => throw _privateConstructorUsedError;
+  @JsonKey(name: 'permanent_id')
   int? get permanentId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'profile_image_url')
   String? get profileImageUrl => throw _privateConstructorUsedError;
   bool? get teamOnly => throw _privateConstructorUsedError;
+  @JsonKey(name: 'twitter_screen_name')
   String? get twitterScreenName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'website_url')
   String? get websiteUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,21 +61,21 @@ abstract class $QiitaProfileCopyWith<$Res> {
   @useResult
   $Res call(
       {String? description,
-      String? facebookId,
-      int? followeesCount,
-      int? followersCount,
-      String? githubLoginName,
-      String? id,
-      int? itemsCount,
-      String? linkedinId,
+      @JsonKey(name: 'facebook_id') String? facebookId,
+      @JsonKey(name: 'followees_count') int? followeesCount,
+      @JsonKey(name: 'followers_count') int? followersCount,
+      @JsonKey(name: 'github_login_name') String? githubLoginName,
+      String id,
+      @JsonKey(name: 'items_count') int? itemsCount,
+      @JsonKey(name: 'linkedin_id') String? linkedinId,
       String? location,
       String? name,
       String? organization,
-      int? permanentId,
-      String? profileImageUrl,
+      @JsonKey(name: 'permanent_id') int? permanentId,
+      @JsonKey(name: 'profile_image_url') String? profileImageUrl,
       bool? teamOnly,
-      String? twitterScreenName,
-      String? websiteUrl});
+      @JsonKey(name: 'twitter_screen_name') String? twitterScreenName,
+      @JsonKey(name: 'website_url') String? websiteUrl});
 }
 
 /// @nodoc
@@ -86,7 +96,7 @@ class _$QiitaProfileCopyWithImpl<$Res, $Val extends QiitaProfile>
     Object? followeesCount = freezed,
     Object? followersCount = freezed,
     Object? githubLoginName = freezed,
-    Object? id = freezed,
+    Object? id = null,
     Object? itemsCount = freezed,
     Object? linkedinId = freezed,
     Object? location = freezed,
@@ -119,10 +129,10 @@ class _$QiitaProfileCopyWithImpl<$Res, $Val extends QiitaProfile>
           ? _value.githubLoginName
           : githubLoginName // ignore: cast_nullable_to_non_nullable
               as String?,
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       itemsCount: freezed == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
@@ -177,21 +187,21 @@ abstract class _$$QiitaProfileImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? description,
-      String? facebookId,
-      int? followeesCount,
-      int? followersCount,
-      String? githubLoginName,
-      String? id,
-      int? itemsCount,
-      String? linkedinId,
+      @JsonKey(name: 'facebook_id') String? facebookId,
+      @JsonKey(name: 'followees_count') int? followeesCount,
+      @JsonKey(name: 'followers_count') int? followersCount,
+      @JsonKey(name: 'github_login_name') String? githubLoginName,
+      String id,
+      @JsonKey(name: 'items_count') int? itemsCount,
+      @JsonKey(name: 'linkedin_id') String? linkedinId,
       String? location,
       String? name,
       String? organization,
-      int? permanentId,
-      String? profileImageUrl,
+      @JsonKey(name: 'permanent_id') int? permanentId,
+      @JsonKey(name: 'profile_image_url') String? profileImageUrl,
       bool? teamOnly,
-      String? twitterScreenName,
-      String? websiteUrl});
+      @JsonKey(name: 'twitter_screen_name') String? twitterScreenName,
+      @JsonKey(name: 'website_url') String? websiteUrl});
 }
 
 /// @nodoc
@@ -210,7 +220,7 @@ class __$$QiitaProfileImplCopyWithImpl<$Res>
     Object? followeesCount = freezed,
     Object? followersCount = freezed,
     Object? githubLoginName = freezed,
-    Object? id = freezed,
+    Object? id = null,
     Object? itemsCount = freezed,
     Object? linkedinId = freezed,
     Object? location = freezed,
@@ -243,10 +253,10 @@ class __$$QiitaProfileImplCopyWithImpl<$Res>
           ? _value.githubLoginName
           : githubLoginName // ignore: cast_nullable_to_non_nullable
               as String?,
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       itemsCount: freezed == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
@@ -296,21 +306,21 @@ class __$$QiitaProfileImplCopyWithImpl<$Res>
 class _$QiitaProfileImpl implements _QiitaProfile {
   const _$QiitaProfileImpl(
       {required this.description,
-      required this.facebookId,
-      required this.followeesCount,
-      required this.followersCount,
-      required this.githubLoginName,
+      @JsonKey(name: 'facebook_id') required this.facebookId,
+      @JsonKey(name: 'followees_count') required this.followeesCount,
+      @JsonKey(name: 'followers_count') required this.followersCount,
+      @JsonKey(name: 'github_login_name') required this.githubLoginName,
       required this.id,
-      required this.itemsCount,
-      required this.linkedinId,
+      @JsonKey(name: 'items_count') required this.itemsCount,
+      @JsonKey(name: 'linkedin_id') required this.linkedinId,
       required this.location,
       required this.name,
       required this.organization,
-      required this.permanentId,
-      required this.profileImageUrl,
+      @JsonKey(name: 'permanent_id') required this.permanentId,
+      @JsonKey(name: 'profile_image_url') required this.profileImageUrl,
       required this.teamOnly,
-      required this.twitterScreenName,
-      required this.websiteUrl});
+      @JsonKey(name: 'twitter_screen_name') required this.twitterScreenName,
+      @JsonKey(name: 'website_url') required this.websiteUrl});
 
   factory _$QiitaProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$QiitaProfileImplFromJson(json);
@@ -318,18 +328,24 @@ class _$QiitaProfileImpl implements _QiitaProfile {
   @override
   final String? description;
   @override
+  @JsonKey(name: 'facebook_id')
   final String? facebookId;
   @override
+  @JsonKey(name: 'followees_count')
   final int? followeesCount;
   @override
+  @JsonKey(name: 'followers_count')
   final int? followersCount;
   @override
+  @JsonKey(name: 'github_login_name')
   final String? githubLoginName;
   @override
-  final String? id;
+  final String id;
   @override
+  @JsonKey(name: 'items_count')
   final int? itemsCount;
   @override
+  @JsonKey(name: 'linkedin_id')
   final String? linkedinId;
   @override
   final String? location;
@@ -338,14 +354,18 @@ class _$QiitaProfileImpl implements _QiitaProfile {
   @override
   final String? organization;
   @override
+  @JsonKey(name: 'permanent_id')
   final int? permanentId;
   @override
+  @JsonKey(name: 'profile_image_url')
   final String? profileImageUrl;
   @override
   final bool? teamOnly;
   @override
+  @JsonKey(name: 'twitter_screen_name')
   final String? twitterScreenName;
   @override
+  @JsonKey(name: 'website_url')
   final String? websiteUrl;
 
   @override
@@ -427,22 +447,26 @@ class _$QiitaProfileImpl implements _QiitaProfile {
 
 abstract class _QiitaProfile implements QiitaProfile {
   const factory _QiitaProfile(
-      {required final String? description,
-      required final String? facebookId,
-      required final int? followeesCount,
-      required final int? followersCount,
-      required final String? githubLoginName,
-      required final String? id,
-      required final int? itemsCount,
-      required final String? linkedinId,
-      required final String? location,
-      required final String? name,
-      required final String? organization,
-      required final int? permanentId,
-      required final String? profileImageUrl,
-      required final bool? teamOnly,
-      required final String? twitterScreenName,
-      required final String? websiteUrl}) = _$QiitaProfileImpl;
+          {required final String? description,
+          @JsonKey(name: 'facebook_id') required final String? facebookId,
+          @JsonKey(name: 'followees_count') required final int? followeesCount,
+          @JsonKey(name: 'followers_count') required final int? followersCount,
+          @JsonKey(name: 'github_login_name')
+          required final String? githubLoginName,
+          required final String id,
+          @JsonKey(name: 'items_count') required final int? itemsCount,
+          @JsonKey(name: 'linkedin_id') required final String? linkedinId,
+          required final String? location,
+          required final String? name,
+          required final String? organization,
+          @JsonKey(name: 'permanent_id') required final int? permanentId,
+          @JsonKey(name: 'profile_image_url')
+          required final String? profileImageUrl,
+          required final bool? teamOnly,
+          @JsonKey(name: 'twitter_screen_name')
+          required final String? twitterScreenName,
+          @JsonKey(name: 'website_url') required final String? websiteUrl}) =
+      _$QiitaProfileImpl;
 
   factory _QiitaProfile.fromJson(Map<String, dynamic> json) =
       _$QiitaProfileImpl.fromJson;
@@ -450,18 +474,24 @@ abstract class _QiitaProfile implements QiitaProfile {
   @override
   String? get description;
   @override
+  @JsonKey(name: 'facebook_id')
   String? get facebookId;
   @override
+  @JsonKey(name: 'followees_count')
   int? get followeesCount;
   @override
+  @JsonKey(name: 'followers_count')
   int? get followersCount;
   @override
+  @JsonKey(name: 'github_login_name')
   String? get githubLoginName;
   @override
-  String? get id;
+  String get id;
   @override
+  @JsonKey(name: 'items_count')
   int? get itemsCount;
   @override
+  @JsonKey(name: 'linkedin_id')
   String? get linkedinId;
   @override
   String? get location;
@@ -470,14 +500,18 @@ abstract class _QiitaProfile implements QiitaProfile {
   @override
   String? get organization;
   @override
+  @JsonKey(name: 'permanent_id')
   int? get permanentId;
   @override
+  @JsonKey(name: 'profile_image_url')
   String? get profileImageUrl;
   @override
   bool? get teamOnly;
   @override
+  @JsonKey(name: 'twitter_screen_name')
   String? get twitterScreenName;
   @override
+  @JsonKey(name: 'website_url')
   String? get websiteUrl;
   @override
   @JsonKey(ignore: true)

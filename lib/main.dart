@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qiita_trend/theme/app_theme.dart';
 import 'package:sizer/sizer.dart';
 import '/routes/router.dart';
 
@@ -43,14 +42,20 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = useMemoized(() => AppRouter());
-    final theme = ref.watch(appThemeProvider);
-    final themeMode = ref.watch(appThemeModeProvider);
     return Sizer(
         builder: ((context, orientation, deviceType) => MaterialApp.router(
               title: 'Qiita Trend',
-              theme: theme.data,
-              darkTheme: AppTheme.dark().data,
-              themeMode: themeMode,
+              // theme: FlexThemeData.light(scheme: FlexScheme.sakura),
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              darkTheme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(
+                    seedColor: const Color.fromARGB(255, 169, 58, 183)),
+                useMaterial3: true,
+              ),
+              themeMode: ThemeMode.system,
               routerConfig: appRouter.config(),
               debugShowCheckedModeBanner: false,
               localizationsDelegates: L10n.localizationsDelegates,

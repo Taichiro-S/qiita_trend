@@ -37,7 +37,7 @@ class QiitaLoginPageWidget extends ConsumerWidget {
               ref.invalidate(qiitaAuthStorageProvider);
             }
           } catch (e) {
-            debugPrint(e.toString());
+            throw Exception(e);
           }
         }
       },
@@ -56,7 +56,6 @@ class QiitaLoginPageWidget extends ConsumerWidget {
             url.toString().contains('/oauth/callback')) {
           return;
         }
-        debugPrint(message);
         webViewNotifier.error(message);
       },
     );

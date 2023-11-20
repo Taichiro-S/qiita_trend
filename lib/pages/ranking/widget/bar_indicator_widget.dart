@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
-import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
+import 'package:qiita_trend/pages/ranking/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
 
 class BarIndicator extends ConsumerWidget {
@@ -18,36 +18,43 @@ class BarIndicator extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loadedTagsAsync = ref.watch(loadedTagsProvider);
-    final double maxWidth = MediaQuery.of(context).size.width - 200;
+    final double maxWidth = MediaQuery.of(context).size.width - 150;
     final displaySettings = ref.watch(displaySettingsProvider);
 
     return Container(
         child: loadedTagsAsync.rankedTags.when(
       data: (tags) {
-        int maxValue;
+        int maxValue = 0;
+
         if (displaySettings.sortOrder == RankedTagsSortOrder.followersCount) {
-          maxValue = tags[0].followersCount;
+          for (var i = 0; i < tags.length; i++) {
+            if (tags[i].followersCount > maxValue) {
+              maxValue = tags[i].followersCount;
+            }
+          }
         } else if (displaySettings.sortOrder ==
             RankedTagsSortOrder.itemsCount) {
-          maxValue = tags[0].itemsCount;
+          for (var i = 0; i < tags.length; i++) {
+            if (tags[i].itemsCount > maxValue) {
+              maxValue = tags[i].itemsCount;
+            }
+          }
         } else if (displaySettings.sortOrder ==
             RankedTagsSortOrder.itemsCountChange) {
-          maxValue = tags[0].itemsCountChange;
+          for (var i = 0; i < tags.length; i++) {
+            if (tags[i].itemsCountChange > maxValue) {
+              maxValue = tags[i].itemsCountChange;
+            }
+          }
         } else {
-          maxValue = tags[0].followersCountChange;
+          for (var i = 0; i < tags.length; i++) {
+            if (tags[i].followersCountChange > maxValue) {
+              maxValue = tags[i].followersCountChange;
+            }
+          }
         }
         final double ratio = value / (maxValue * 1.0);
         return Row(children: [
-          displaySettings.sortOrder == RankedTagsSortOrder.itemsCountChange ||
-                  displaySettings.sortOrder == RankedTagsSortOrder.itemsCount
-              ? const Icon(
-                  Icons.description,
-                  size: 18,
-                )
-              : const Icon(
-                  Icons.person,
-                  size: 18,
-                ),
           const SizedBox(
             width: 5,
           ),
@@ -59,13 +66,13 @@ class BarIndicator extends ConsumerWidget {
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          const SizedBox(
-            width: 5,
-          ),
+          const SizedBox(width: 5),
           Text(
             displayCount,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
             ),
           )
         ]);
@@ -77,7 +84,6 @@ class BarIndicator extends ConsumerWidget {
         ),
       ),
       error: (e, s) {
-        debugPrint(e.toString());
         return Text(e.toString());
       },
     ));

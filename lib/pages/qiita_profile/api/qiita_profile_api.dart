@@ -8,7 +8,7 @@ import '/service/secure_storage.dart';
 part 'qiita_profile_api.g.dart';
 
 class QiitaProfileApi {
-  Future<QiitaProfile> getProfile() async {
+  Future<QiitaProfile> fetchProfile() async {
     try {
       final secureStorage = SecureStorage();
       final accessToken = await secureStorage.read('qiitaApiAccessToken');
@@ -28,7 +28,7 @@ class QiitaProfileApi {
             'Failed to fecth profile: ${response.body}; statusCode: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to get profile: $e');
+      throw Exception('Error Fetcing profile: $e');
     }
   }
 }

@@ -20,6 +20,9 @@ mixin _$LoadedTagsState {
       throw _privateConstructorUsedError;
   DocumentSnapshot<Object?>? get lastDoc => throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
+  bool get isSearching => throw _privateConstructorUsedError;
+  bool get showSearchResult => throw _privateConstructorUsedError;
+  String? get searchWord => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoadedTagsStateCopyWith<LoadedTagsState> get copyWith =>
@@ -35,7 +38,10 @@ abstract class $LoadedTagsStateCopyWith<$Res> {
   $Res call(
       {AsyncValue<List<RankedTag>> rankedTags,
       DocumentSnapshot<Object?>? lastDoc,
-      bool isLoadingMore});
+      bool isLoadingMore,
+      bool isSearching,
+      bool showSearchResult,
+      String? searchWord});
 }
 
 /// @nodoc
@@ -54,6 +60,9 @@ class _$LoadedTagsStateCopyWithImpl<$Res, $Val extends LoadedTagsState>
     Object? rankedTags = null,
     Object? lastDoc = freezed,
     Object? isLoadingMore = null,
+    Object? isSearching = null,
+    Object? showSearchResult = null,
+    Object? searchWord = freezed,
   }) {
     return _then(_value.copyWith(
       rankedTags: null == rankedTags
@@ -68,6 +77,18 @@ class _$LoadedTagsStateCopyWithImpl<$Res, $Val extends LoadedTagsState>
           ? _value.isLoadingMore
           : isLoadingMore // ignore: cast_nullable_to_non_nullable
               as bool,
+      isSearching: null == isSearching
+          ? _value.isSearching
+          : isSearching // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSearchResult: null == showSearchResult
+          ? _value.showSearchResult
+          : showSearchResult // ignore: cast_nullable_to_non_nullable
+              as bool,
+      searchWord: freezed == searchWord
+          ? _value.searchWord
+          : searchWord // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -83,7 +104,10 @@ abstract class _$$LoadedTagsStateImplCopyWith<$Res>
   $Res call(
       {AsyncValue<List<RankedTag>> rankedTags,
       DocumentSnapshot<Object?>? lastDoc,
-      bool isLoadingMore});
+      bool isLoadingMore,
+      bool isSearching,
+      bool showSearchResult,
+      String? searchWord});
 }
 
 /// @nodoc
@@ -100,6 +124,9 @@ class __$$LoadedTagsStateImplCopyWithImpl<$Res>
     Object? rankedTags = null,
     Object? lastDoc = freezed,
     Object? isLoadingMore = null,
+    Object? isSearching = null,
+    Object? showSearchResult = null,
+    Object? searchWord = freezed,
   }) {
     return _then(_$LoadedTagsStateImpl(
       rankedTags: null == rankedTags
@@ -114,6 +141,18 @@ class __$$LoadedTagsStateImplCopyWithImpl<$Res>
           ? _value.isLoadingMore
           : isLoadingMore // ignore: cast_nullable_to_non_nullable
               as bool,
+      isSearching: null == isSearching
+          ? _value.isSearching
+          : isSearching // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSearchResult: null == showSearchResult
+          ? _value.showSearchResult
+          : showSearchResult // ignore: cast_nullable_to_non_nullable
+              as bool,
+      searchWord: freezed == searchWord
+          ? _value.searchWord
+          : searchWord // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -124,7 +163,10 @@ class _$LoadedTagsStateImpl implements _LoadedTagsState {
   const _$LoadedTagsStateImpl(
       {required this.rankedTags,
       required this.lastDoc,
-      required this.isLoadingMore});
+      required this.isLoadingMore,
+      required this.isSearching,
+      required this.showSearchResult,
+      this.searchWord});
 
   @override
   final AsyncValue<List<RankedTag>> rankedTags;
@@ -132,10 +174,16 @@ class _$LoadedTagsStateImpl implements _LoadedTagsState {
   final DocumentSnapshot<Object?>? lastDoc;
   @override
   final bool isLoadingMore;
+  @override
+  final bool isSearching;
+  @override
+  final bool showSearchResult;
+  @override
+  final String? searchWord;
 
   @override
   String toString() {
-    return 'LoadedTagsState(rankedTags: $rankedTags, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore)';
+    return 'LoadedTagsState(rankedTags: $rankedTags, lastDoc: $lastDoc, isLoadingMore: $isLoadingMore, isSearching: $isSearching, showSearchResult: $showSearchResult, searchWord: $searchWord)';
   }
 
   @override
@@ -147,12 +195,18 @@ class _$LoadedTagsStateImpl implements _LoadedTagsState {
                 other.rankedTags == rankedTags) &&
             (identical(other.lastDoc, lastDoc) || other.lastDoc == lastDoc) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
-                other.isLoadingMore == isLoadingMore));
+                other.isLoadingMore == isLoadingMore) &&
+            (identical(other.isSearching, isSearching) ||
+                other.isSearching == isSearching) &&
+            (identical(other.showSearchResult, showSearchResult) ||
+                other.showSearchResult == showSearchResult) &&
+            (identical(other.searchWord, searchWord) ||
+                other.searchWord == searchWord));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, rankedTags, lastDoc, isLoadingMore);
+  int get hashCode => Object.hash(runtimeType, rankedTags, lastDoc,
+      isLoadingMore, isSearching, showSearchResult, searchWord);
 
   @JsonKey(ignore: true)
   @override
@@ -166,7 +220,10 @@ abstract class _LoadedTagsState implements LoadedTagsState {
   const factory _LoadedTagsState(
       {required final AsyncValue<List<RankedTag>> rankedTags,
       required final DocumentSnapshot<Object?>? lastDoc,
-      required final bool isLoadingMore}) = _$LoadedTagsStateImpl;
+      required final bool isLoadingMore,
+      required final bool isSearching,
+      required final bool showSearchResult,
+      final String? searchWord}) = _$LoadedTagsStateImpl;
 
   @override
   AsyncValue<List<RankedTag>> get rankedTags;
@@ -174,6 +231,12 @@ abstract class _LoadedTagsState implements LoadedTagsState {
   DocumentSnapshot<Object?>? get lastDoc;
   @override
   bool get isLoadingMore;
+  @override
+  bool get isSearching;
+  @override
+  bool get showSearchResult;
+  @override
+  String? get searchWord;
   @override
   @JsonKey(ignore: true)
   _$$LoadedTagsStateImplCopyWith<_$LoadedTagsStateImpl> get copyWith =>

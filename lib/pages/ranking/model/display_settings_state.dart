@@ -7,5 +7,6 @@ class DisplaySettingsState with _$DisplaySettingsState {
   const factory DisplaySettingsState({
     required Collection timePeriod,
     required RankedTagsSortOrder sortOrder,
+    required bool showChart,
   }) = _DisplaySettingsState;
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
+import 'package:qiita_trend/pages/ranking/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/provider/loaded_tags_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -19,18 +19,28 @@ class ScrollControllerNotifier extends _$ScrollControllerNotifier {
 
   void _fetchInitialDatas() {
     final displaySettings = ref.read(displaySettingsProvider);
-    ref.read(loadedTagsProvider.notifier).fetchRankedTags(
+    ref.read(loadedTagsProvider.notifier).getRankedTags(
         timePeriod: displaySettings.timePeriod,
         sortOrder: displaySettings.sortOrder);
   }
 
   void _scrollListener() {
     if (state.position.pixels == state.position.maxScrollExtent) {
+      final showSearchResult = ref
+          .watch(loadedTagsProvider.select((state) => state.showSearchResult));
+      final searchWord =
+          ref.watch(loadedTagsProvider.select((state) => state.searchWord));
       final displaySettings = ref.read(displaySettingsProvider);
-
-      ref.read(loadedTagsProvider.notifier).fetchMoreRankedTags(
-          timePeriod: displaySettings.timePeriod,
-          sortOrder: displaySettings.sortOrder);
+      if (showSearchResult) {
+        ref.read(loadedTagsProvider.notifier).getMoreSearchedTags(
+            timePeriod: displaySettings.timePeriod,
+            sortOrder: displaySettings.sortOrder,
+            searchWord: searchWord!);
+      } else {
+        ref.read(loadedTagsProvider.notifier).getMoreRankedTags(
+            timePeriod: displaySettings.timePeriod,
+            sortOrder: displaySettings.sortOrder);
+      }
     }
   }
 }

@@ -10,5 +10,8 @@ class LoadedTagsState with _$LoadedTagsState {
     required AsyncValue<List<RankedTag>> rankedTags,
     required DocumentSnapshot? lastDoc,
     required bool isLoadingMore,
+    required bool isSearching,
+    required bool showSearchResult,
+    String? searchWord,
   }) = _LoadedTagsState;
 }

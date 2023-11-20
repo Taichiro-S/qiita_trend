@@ -2,12 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:qiita_trend/constant/default_value.dart';
 import 'package:qiita_trend/constant/firestore_arg.dart';
-import 'package:qiita_trend/main.dart';
-import 'package:qiita_trend/pages/display_settings/provider/display_settings_provider.dart';
 import 'package:qiita_trend/pages/ranking/model/ranked_tag.dart';
 import 'package:qiita_trend/pages/ranking/model/tag_history_state.dart';
+import 'package:qiita_trend/pages/ranking/provider/display_settings_provider.dart';
 import 'package:qiita_trend/theme/app_colors.dart';
 
 class TagHistoryWidget extends ConsumerWidget {
@@ -17,7 +15,11 @@ class TagHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final displaySettings = ref.watch(displaySettingsProvider);
-    List<TagHistoryState> dataset = rankedTag.itemsCountHistory!;
+    List<TagHistoryState>? dataset = rankedTag.itemsCountHistory;
+    final String timePeriod =
+        displaySettings.timePeriod == Collection.monthlyRanking
+            ? 'monthly'
+            : 'weekly';
     if (displaySettings.sortOrder == RankedTagsSortOrder.itemsCountChange) {
       if (rankedTag.itemsCountHistory == null) {
         return Container();
@@ -32,7 +34,6 @@ class TagHistoryWidget extends ConsumerWidget {
     }
     return Stack(
       children: <Widget>[
-        const Text('グラフ'),
         AspectRatio(
           aspectRatio: 1.50,
           child: Padding(
@@ -42,14 +43,16 @@ class TagHistoryWidget extends ConsumerWidget {
               top: 10,
               bottom: 10,
             ),
-            child: LineChart(mainData(dataset)),
+            child: dataset == null
+                ? Container()
+                : LineChart(mainData(dataset, timePeriod)),
           ),
         ),
       ],
     );
   }
 
-  LineChartData mainData(List<TagHistoryState> dataset) {
+  LineChartData mainData(List<TagHistoryState> dataset, String timePeriod) {
     List<Color> gradientColors = [
       AppColors.light().secondary,
       AppColors.light().primary,
@@ -70,9 +73,8 @@ class TagHistoryWidget extends ConsumerWidget {
       }
       spots.add(FlSpot(x, cumulativeY));
     }
-    List<DateTime> dates = dataset
-        .map((history) => history.date.toDate()) // TimestampからDateTimeに変換
-        .toList();
+    List<DateTime> dates =
+        dataset.map((history) => history.date.toDate()).toList();
     return LineChartData(
       gridData: const FlGridData(show: false),
       titlesData: FlTitlesData(
@@ -103,17 +105,22 @@ class TagHistoryWidget extends ConsumerWidget {
               );
             },
             reservedSize: 30,
-            interval: 1,
+            interval: timePeriod == 'monthly' ? 7 : 1,
           ),
         ),
-        // rightTitles: const AxisTitles(
-        //   sideTitles: SideTitles(showTitles: false),
-        // ),
         rightTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: 50,
-            reservedSize: 30,
+            interval: maxY > 1000
+                ? 500
+                : maxY > 500
+                    ? 200
+                    : maxY > 100
+                        ? 100
+                        : maxY > 50
+                            ? 20
+                            : 5,
+            reservedSize: maxY > 100 ? 30 : 24,
             getTitlesWidget: (value, meta) {
               if (value == maxY || value == minY) {
                 return const Text('');
@@ -135,7 +142,7 @@ class TagHistoryWidget extends ConsumerWidget {
         border: const Border(),
       ),
       minX: 0,
-      maxX: 6,
+      maxX: timePeriod == 'monthly' ? 29 : 6,
       minY: minY,
       maxY: maxY,
       lineBarsData: [

@@ -2,14 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qiita_trend/api/qiita_auth_api.dart';
+import 'package:qiita_trend/pages/qiita_profile/model/qiita_profile_state.dart';
+import 'package:qiita_trend/pages/qiita_profile/provider/qiita_following_tags_provider.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/qiita_profile_provider.dart';
 import 'package:qiita_trend/pages/qiita_profile/provider/webview_provider.dart';
+import 'package:qiita_trend/pages/qiita_profile/widget/qiita_following_tags_widget.dart';
 import 'package:qiita_trend/pages/qiita_profile/widget/qiita_login_page_widget.dart';
 import 'package:qiita_trend/provider/qiita_auth_storage_provider.dart';
 import 'package:qiita_trend/theme/app_colors.dart';
 import 'package:qiita_trend/widget/circle_loading_widget.dart';
 
-@RoutePage()
 class QiitaProfilePage extends ConsumerWidget {
   const QiitaProfilePage({super.key});
 
@@ -18,12 +20,22 @@ class QiitaProfilePage extends ConsumerWidget {
     final webView = ref.watch(webViewProvider);
     final webViewNotifier = ref.read(webViewProvider.notifier);
     final isQiitaAuthAsync = ref.watch(qiitaAuthStorageProvider);
+    ref.watch(qiitaFollowingTagsProvider);
+    final qiitaProfileAsync = ref.watch(qiitaProfileProvider);
     final qiitaAuth = QiitaAuthApi();
 
     ref.listen<AsyncValue<bool>>(qiitaAuthStorageProvider,
         (_, isQiitaAuthAsync) {
       if (isQiitaAuthAsync.value == true) {
-        ref.invalidate(qiitaProfileProvider);
+        ref.read(qiitaProfileProvider.notifier).getProfile();
+      }
+    });
+    ref.listen<QiitaProfileState>(qiitaProfileProvider, (_, qiitaProfileAsync) {
+      final id = qiitaProfileAsync.qiitaProfile.value?.id;
+      if (id != null) {
+        ref
+            .read(qiitaFollowingTagsProvider.notifier)
+            .getFollowingTags(userId: id);
       }
     });
     if (webView.isOpen) {
@@ -36,7 +48,7 @@ class QiitaProfilePage extends ConsumerWidget {
             ),
             const Padding(
                 padding: EdgeInsetsDirectional.only(start: 20),
-                child: Text("Login Qiita account")),
+                child: Text("Login Qiita")),
           ])),
           body: Column(children: [
             Expanded(
@@ -75,8 +87,7 @@ class QiitaProfilePage extends ConsumerWidget {
                 child: CircleLoadingWidget(color: Colors.green, fontSize: 20)),
             data: (isAuth) {
               if (isAuth) {
-                final qiitaProfileAsync = ref.watch(qiitaProfileProvider);
-                return qiitaProfileAsync.when(
+                return qiitaProfileAsync.qiitaProfile.when(
                   error: (e, s) => Text(e.toString()),
                   loading: () => const Center(
                       child: CircleLoadingWidget(
@@ -88,6 +99,7 @@ class QiitaProfilePage extends ConsumerWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                           Text('userame: ${qiitaProfile.name ?? '名無し'} さん'),
+                          QiitaFollowingTagsWidhet(userId: qiitaProfile.id),
                           ElevatedButton(
                               onPressed: () async {
                                 await qiitaAuth.logout();

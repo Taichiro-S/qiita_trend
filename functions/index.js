@@ -1,7 +1,8 @@
 const QIITA_API_V2_TAGS =
   'https://qiita.com/api/v2/tags?per_page=100&sort=count&page='
 const TIME_TO_FETCH_TAGS = '0 0,6,12,18 * * *'
-const TIME_TO_CALC_RANKING = '30 11 * * *'
+const TIME_TO_FETCH_DAILY_TAGS = '0 6 * * *'
+const TIME_TO_CALC_RANKING = '15 6 * * *'
 const WEEKLY_ITEMS_COUNT_CUTOFF = 7
 const MONTHLY_ITEMS_COUNT_CUTOFF = 30
 const WEEKLY_FOLLOWERS_COUNT_CUTOFF = 7
@@ -20,6 +21,104 @@ exports.fetchQiitaTags = functions
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
+      const now = new Date()
+      let allTags = []
+      for (let page = 1; page <= 5; page++) {
+        const response = await axios.get(QIITA_API_V2_TAGS + page)
+        allTags = allTags.concat(response.data)
+      }
+      const tagsFetched = new Date()
+      console.log(allTags.length + `tags fetched: ${tagsFetched -  now}`)
+
+      const start = new Date(now)
+      start.setHours(start.getHours() - 7)
+      const end = new Date(now)
+      end.setHours(end.getHours() - 1)
+      const tagsRef = db.collection('tags')
+      for (const tag of allTags) {
+        const tagRef = tagsRef.doc(tag.id)
+        const tagDoc = await tagRef.get()
+        if (tagDoc.exists) {
+          const historyPreviousRef = tagRef
+            .collection('history')
+            .where('date', '<', end)
+            .where('date', '>', start)
+            .limit(1)
+          const historyCurrentRef = tagRef
+            .collection('history')
+            .doc(now.toISOString())
+          const historyPreviousDoc = await historyPreviousRef.get()
+          if (!historyPreviousDoc.empty) {
+            // If previous history document exists, calculate the changes
+            const historyData = {
+              items_change:
+                tag.items_count - historyPreviousDoc.docs[0].data().items_count,
+              followers_change:
+                tag.followers_count -
+                historyPreviousDoc.docs[0].data().followers_count,
+              items_count: tag.items_count,
+              followers_count: tag.followers_count,
+              date: now,
+            }
+            await historyCurrentRef.set(historyData)
+          } else {
+            // If previous history document doesn't exist, 
+            // calculate change from recent data.
+            const historyRecentPreviousRef = tagRef
+              .collection('history')
+              .where('date', '<', end)
+              .orderBy('date', 'desc')
+              .limit(1)
+            const historyRecentPreviousDoc =
+              await historyRecentPreviousRef.get()
+            const historyData = {
+              items_change:
+                tag.items_count -
+                historyRecentPreviousDoc.docs[0].data().items_count,
+              followers_change:
+                tag.followers_count -
+                historyRecentPreviousDoc.docs[0].data().followers_count,
+              items_count: tag.items_count,
+              followers_count: tag.followers_count,
+              date: now,
+            }
+            await historyCurrentRef.set(historyData)
+          }
+          // Update the main tag document with the new counts
+          await tagRef.update({
+            items_count: tag.items_count,
+            followers_count: tag.followers_count,
+          })
+        } else {
+          // If tagDoc doesn't exist, save all data.
+          await tagRef.set(tag)
+          await tagRef.collection('history').doc(now.toISOString()).set({
+            items_count: tag.items_count,
+            followers_count: tag.followers_count,
+            date: now,
+          })
+        }
+      }
+
+      const tagsSaved = new Date()
+      console.log(`tags saved: ${tagsSaved -  now}`)
+      return null
+    } catch (error) {
+      console.error('Error fetching data:', error.message)
+      throw new functions.https.HttpsError(
+        'internal',
+        'Failed to fetch and store data.',
+      )
+    }
+  })
+
+
+exports.fetchDailyQiitaTags = functions
+  .runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule(TIME_TO_FETCH_DAILY_TAGS)
+  .timeZone('Asia/Tokyo')
+  .onRun(async (context) => {
+    try {
       let allTags = []
       for (let page = 1; page <= 5; page++) {
         const response = await axios.get(QIITA_API_V2_TAGS + page)
@@ -28,10 +127,10 @@ exports.fetchQiitaTags = functions
 
       const now = new Date()
       const start = new Date(now)
-      start.setHours(start.getHours() - 7)
+      start.setHours(start.getHours() - 25)
       const end = new Date(now)
       end.setHours(end.getHours() - 1)
-      const tagsRef = db.collection('tags')
+      const tagsRef = db.collection('dailyTags')
       for (const tag of allTags) {
         const tagRef = tagsRef.doc(tag.id)
         const tagDoc = await tagRef.get()
@@ -113,14 +212,6 @@ exports.calculateWeeklyRanking = functions
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
-      console.log(QIITA_API_V2_TAGS, TIME_TO_FETCH_TAGS, TIME_TO_CALC_RANKING)
-      // const getDayRange = (date) => {
-      //   const startOfDay = new Date(date)
-      //   startOfDay.setHours(0, 0, 0, 0)
-      //   const endOfDay = new Date(date)
-      //   endOfDay.setHours(23, 59, 59, 999)
-      //   return { startOfDay, endOfDay }
-      // }
       const getOneDayRange = (date) => {
         const startOfDay = new Date(date)
         startOfDay.setHours(startOfDay.getHours() - 24)
@@ -142,7 +233,6 @@ exports.calculateWeeklyRanking = functions
 
       const tagsRef = db.collection('tags')
       const tagsSnapshot = await tagsRef.get()
-      console.log(startOfOneWeekAgo, endOfOneWeekAgo, startOfToday, endOfToday)
       const weeklyRankRef = db
         .collection('weeklyRanking')
         .doc(now.toISOString())
@@ -208,24 +298,6 @@ exports.calculateWeeklyRanking = functions
           for (let i = 0; i < 4; i++) {
             followersCountChange += daySnapshot.docs[i].data().followers_change
           }
-          // if (weeklyItemsCountChange > weeklyItemsCountCutoff) {
-          //   const weeklyItemsCountHistoryRef = weeklyTagRef
-          //   .collection('items_count_history')
-          //   .doc(day.endOfDay.toISOString())
-          //   await weeklyItemsCountHistoryRef.set({
-          //     day: day.endOfDay,
-          //     item_count_change: itemsCountChange,
-          //   })
-          // }
-          // if (weeklyFollowersCountChange > weeklyFollowersCountCutoff) {
-          //   const weeklyFollowersCountHistoryRef = weeklyTagRef
-          //   .collection('followers_count_history')
-          //   .doc(day.endOfDay.toISOString())
-          //   await weeklyFollowersCountHistoryRef.set({
-          //     day: day.endOfDay,
-          //     followers_count_change: followersCountChange,
-          //   })
-          // }
           weeklyItemsCountHistory.push({
             day: day.endOfDay,
             change: itemsCountChange,
@@ -244,13 +316,14 @@ exports.calculateWeeklyRanking = functions
         const weeklyFollowersCountHistoryJson = weeklyFollowersCountHistory.reduce((acc, item) => {
           acc[item.day.toISOString()] = item.change;
           return acc;
-        }, {});
+        }, {})
         const weeklyItemsCountHistoryJson = weeklyItemsCountHistory.reduce((acc, item) => {
           acc[item.day.toISOString()] = item.change;
           return acc;
-        }, {});
+        }, {})
         weeklyTagRef.set({
           id: tagId,
+          name: tagId.toLowerCase(),
           icon_url: tagDoc.data().icon_url,
           items_count: currentSnapshot.docs[0].data().items_count,
           followers_count: currentSnapshot.docs[0].data().followers_count,
@@ -261,6 +334,7 @@ exports.calculateWeeklyRanking = functions
           date: now,
         })
       }
+
 
       return null
     } catch (error) {
@@ -278,11 +352,10 @@ exports.calculateMonthlyRanking = functions
   .timeZone('Asia/Tokyo')
   .onRun(async (context) => {
     try {
-      const getDayRange = (date) => {
+      const getOneDayRange = (date) => {
         const startOfDay = new Date(date)
-        startOfDay.setHours(0, 0, 0, 0)
+        startOfDay.setHours(startOfDay.getHours() - 24)
         const endOfDay = new Date(date)
-        endOfDay.setHours(23, 59, 59, 999)
         return { startOfDay, endOfDay }
       }
       const now = new Date()
@@ -290,13 +363,13 @@ exports.calculateMonthlyRanking = functions
       const thisMonth = []
       for (let i = 0; i < 30; i++) {
         const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
-        const { startOfDay, endOfDay } = getDayRange(date)
+        const { startOfDay, endOfDay } = getOneDayRange(date)
         thisMonth.push({ startOfDay, endOfDay })
       }
       const { startOfDay: startOfToday, endOfDay: endOfToday } =
-        getDayRange(now)
+        getOneDayRange(now)
       const { startOfDay: startOfOneMonthAgo, endOfDay: endOfOneMonthAgo } =
-        getDayRange(oneMonthAgo)
+        getOneDayRange(oneMonthAgo)
 
       const tagsRef = db.collection('tags')
       const tagsSnapshot = await tagsRef.get()
@@ -340,19 +413,11 @@ exports.calculateMonthlyRanking = functions
         ) {
           continue
         }
-        monthlyTagRef.set({
-          id: tagId,
-          icon_url: tagDoc.data().icon_url,
-          items_count: currentSnapshot.docs[0].data().items_count,
-          followers_count: currentSnapshot.docs[0].data().followers_count,
-          items_count_change: monthlyItemsCountChange,
-          followers_count_change: monthlyFollowersCountChange,
-          date: now,
-        })
+        
 
         // 一ヶ月分の変化を取得
-        // let monthlyItemsCountChanges = []
-        // let monthlyFollowersCountChanges = []
+        let monthlyItemsCountHistory = []
+        let monthlyFollowersCountHistory = []
         for (const day of thisMonth) {
           const daySnapshot = await historyRef
             .where('date', '>=', day.startOfDay)
@@ -361,8 +426,8 @@ exports.calculateMonthlyRanking = functions
             .limit(4)
             .get()
           if (daySnapshot.docs.length < 4) {
-            // monthlyItemsCountChanges = []
-            // monthlyFollowersCountChanges = []
+            monthlyItemsCountHistory = []
+            monthlyFollowersCountHistory = []
             break
           }
           let itemsCountChange = 0
@@ -373,25 +438,41 @@ exports.calculateMonthlyRanking = functions
           for (let i = 0; i < 4; i++) {
             followersCountChange += daySnapshot.docs[i].data().followers_change
           }
-          if (monthlyItemsCountChange > MONTHLY_ITEMS_COUNT_CUTOFF) {
-            const monthlyItemsCountHistoryRef = monthlyTagRef
-              .collection('items_count_history')
-              .doc(day.endOfDay.toISOString())
-            await monthlyItemsCountHistoryRef.set({
-              day: day.endOfDay,
-              items_count: itemsCountChange,
-            })
-          }
-          if (monthlyFollowersCountChange > MONTHLY_FOLLOWERS_COUNT_CUTOFF) {
-            const monthlyFollowersCountHistoryRef = monthlyTagRef
-              .collection('followers_count_history')
-              .doc(day.endOfDay.toISOString())
-            await monthlyFollowersCountHistoryRef.set({
-              day: day.endOfDay,
-              followers_count: followersCountChange,
-            })
-          }
+          monthlyItemsCountHistory.push({
+            day: day.endOfDay,
+            change: itemsCountChange,
+          })
+          monthlyFollowersCountHistory.push({
+            day: day.endOfDay,
+            change: followersCountChange,
+          })
         }
+        if (monthlyFollowersCountHistory.length < 7) {
+          monthlyItemsCountHistory = []
+        }
+        if (monthlyItemsCountHistory.length < 7) {
+          monthlyFollowersCountHistory = []
+        }
+        const monthlyFollowersCountHistoryJson = monthlyFollowersCountHistory.reduce((acc, item) => {
+          acc[item.day.toISOString()] = item.change;
+          return acc;
+        }, {})
+        const monthlyItemsCountHistoryJson = monthlyItemsCountHistory.reduce((acc, item) => {
+          acc[item.day.toISOString()] = item.change;
+          return acc;
+        }, {})
+        monthlyTagRef.set({
+          id: tagId,
+          name: tagId.toLowerCase(),
+          icon_url: tagDoc.data().icon_url,
+          items_count: currentSnapshot.docs[0].data().items_count,
+          followers_count: currentSnapshot.docs[0].data().followers_count,
+          items_count_change: monthlyItemsCountChange,
+          followers_count_change: monthlyFollowersCountChange,
+          items_count_history: monthlyItemsCountHistoryJson,
+          followers_count_history: monthlyFollowersCountHistoryJson,
+          date: now,
+        })
       }
       return null
     } catch (error) {

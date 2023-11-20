@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qiita_trend/theme/app_colors.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ToggleSwitchWidget extends ConsumerWidget {
@@ -10,7 +9,7 @@ class ToggleSwitchWidget extends ConsumerWidget {
     required this.onToggle,
     this.minWidth = 100,
     this.minHeight = 40,
-    this.fontSize = 16,
+    this.fontSize = 14,
     this.activeBgColor = const [Colors.blue],
     this.initialIndex = 0,
   });
